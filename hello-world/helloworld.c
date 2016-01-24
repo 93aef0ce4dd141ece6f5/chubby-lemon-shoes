@@ -13,10 +13,10 @@
  */
 void print (char *s) {
 	__asm__ (".intel_syntax noprefix;"
-			"mov eax, %0;"
-			"push eax;"
-			"call printf;"
-			"add esp, 4;"
+			"mov	eax, %0;"
+			"push 	eax;"
+			"call 	printf;"
+			"add 	esp, 4;"
 			".att_syntax noprefix;"
 			:
 			: "r" (s)

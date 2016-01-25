@@ -19,7 +19,7 @@
 #include <winsock2.h>
 #include <windows.h>
 
-#elif __linux__
+#else
 
 #include <sys/socket.h>
 // need other headers?

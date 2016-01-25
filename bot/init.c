@@ -9,7 +9,7 @@
 #include <ws2tcpip.h>
 #include <windows.h>
 
-#elif __linux__
+#else
 
 #include <sys/socket.h>
 // getaddrinfo

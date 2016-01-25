@@ -58,7 +58,7 @@
  */
 #define sleep(x) Sleep ((x)*1000);
 
-#elif __linux__
+#else
 
 /*
  * a sort of hacky solution

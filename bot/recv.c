@@ -14,8 +14,8 @@
 #elif __linux__
 
 #include <sys/socket.h>
+//getaddrinfo
 #include <netdb.h>
-#include <arpa/inet.h>
 
 #endif
 

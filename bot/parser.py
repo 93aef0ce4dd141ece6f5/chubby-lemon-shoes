@@ -21,7 +21,9 @@ parser.add_argument("-v","--verbosity",help="Increase verbosity.", default=False
 
 args = parser.parse_args()
 
-#Print parsed oprions
+#Print parsed options if verbosity is increased.
 if args.verbosity:
 	for arg in vars(args):
 		print(arg+" = "+str(getattr(args, arg)))
+		
+#Open the file and read it.

@@ -90,7 +90,7 @@ typedef struct _message {
  * they are called "bit fields"
  */
 struct _ip_hdr {
-    unsigned char ihl:4 
+    unsigned char ihl:4;
     unsigned char version:4;
     unsigned char tos;
     unsigned short tot_len;
@@ -104,33 +104,33 @@ struct _ip_hdr {
 } IP4_HDR, *pIP4_HDR;
 
 struct _udp_hdr {
-    unsigned short source_port;
-    unsigned short dest_port;
-    unsigned short len;
-    unsigned short check;
+	unsigned short source_port;
+	unsigned short dest_port;
+	unsigned short len;
+	unsigned short check;
 } UDP_HDR, *pUDP_HDR;
 
 struct _tcp_hdr {
-    unsigned short source_prt;
-    unsigned short dest_port;
-    unsigned long seq;
-    unsigned long ack_seq;
-    unsigned short res1:4
-    unsigned short data_offset:4;
+	unsigned short source_prt;
+	unsigned short dest_port;
+	unsigned long seq;
+	unsigned long ack_seq;
+	unsigned short res1:4
+	unsigned short data_offset:4;
     
-    // flags
-  	unsigned char fin:1 
-  	unsigned char syn:1
-  	unsigned char rst:1
-  	unsigned char psh:1
-  	unsigned char ack:1
-  	unsigned char urg:1
-  	unsigned char ece:1
-  	unsigned char cwr:1;
-  
-    unsigned short window;
-    unsigned short check;
-    unsigned short urg_ptr;
+	// flags
+	unsigned char fin:1; 
+	unsigned char syn:1;
+	unsigned char rst:1;
+	unsigned char psh:1;
+	unsigned char ack:1;
+	unsigned char urg:1;
+	unsigned char ece:1;
+	unsigned char cwr:1;
+	
+	unsigned short window;
+	unsigned short check;
+	unsigned short urg_ptr;
 } TCP_HDR, *pTCP_HDR;
 
 /*

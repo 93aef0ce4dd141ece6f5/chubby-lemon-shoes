@@ -43,6 +43,15 @@
  */
 #define sleep(x) Sleep ((x)*1000);
 
+#elif __linux__
+
+/*
+ * a sort of hacky solution
+ * to WIN32's SOCKET typedef
+ * and linux's file descriptor
+ */
+typedef SOCKET unsigned int
+
 #endif
 
 /*

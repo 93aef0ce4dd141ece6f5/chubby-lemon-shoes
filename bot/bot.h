@@ -34,7 +34,21 @@
  */
 #define MAX_NAME 31
 
-#define zeroMem(x) memset((x), 0, sizeof (x));
+/*
+ * defining some options
+ * which must be tweaked
+ * per compile
+ * maybe parse these 
+ * options with a python
+ * script
+ */
+#define SERVER 	irc.freenode.net
+#define CHANNEL #nullbyte
+#define U_NAME 	koekje
+#define N_NAME 	koekje
+#define PWORD 	NULL
+
+char *admins[] = {"dontrustme"};
 
 #ifdef _WIN32
 /*

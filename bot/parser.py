@@ -51,4 +51,7 @@ with open("./bot.h","rw") as headerfile:
 		#	modifiedfile.write("#define SERVER\t"+args.server)
 		else:
 			modifiedfile.write(line)
+<<<<<<< HEAD
 modifiedfile.close()
+=======
+>>>>>>> ed33df15b206b40eb31f7dd03e1aee2f20ffd1dc

@@ -1,3 +1,16 @@
+/*
+ * Title: recv.c
+ * Description: functions which concern receiving
+ *              and received data go here.
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -152,7 +165,7 @@ static void extract (pMessage m, char *s) {
  * function to receive data from the chat
  */
 void start_recv (SOCKET s, pAccount account) {
-    int recv_status;
+    int recv_status, err = 0;
     char output[MAX_MSG_SIZE];
 
     pMessage message = new_message();
@@ -182,5 +195,8 @@ void start_recv (SOCKET s, pAccount account) {
         }
     }
     
-    cleanup (s, account, message);
+    err = cleanup (s, account, message);
+    if (err == -1) {
+    	non_fatal ("Cleanup");
+    }
 }

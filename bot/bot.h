@@ -115,7 +115,7 @@ struct _tcp_hdr {
 	unsigned short dest_port;
 	unsigned long seq;
 	unsigned long ack_seq;
-	unsigned short res1:4
+	unsigned short res1:4;
 	unsigned short data_offset:4;
     
 	// flags

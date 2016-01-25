@@ -2,10 +2,7 @@
 
 #Imports:
 import argparse
-<<<<<<< HEAD
 import sys
-=======
->>>>>>> baby steps in parsing options
 from random import SystemRandom
 from string import ascii_uppercase, digits
 
@@ -35,6 +32,8 @@ if args.verbosity:
 		
 #Open the file and read it.
 
+
+
 modifiedfile = open("./newhead.h","w")
 with open("./bot.h","rw") as headerfile:
 	while True:
@@ -58,4 +57,6 @@ with open("./bot.h","rw") as headerfile:
 		#	modifiedfile.write("#define SERVER\t"+args.server)
 		else:
 			modifiedfile.write(line)
+
+
 

@@ -100,9 +100,6 @@ int main (int argc, char *argv[]) {
             case 'c':
                 account->channel = optarg;
                 break;
-            case 'a':
-                account->admin = optarg;
-                break;
             case 'u':
                 uflag = 1;
                 strncpy (account->u_name, optarg, MAX_NAME-1);

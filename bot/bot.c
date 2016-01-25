@@ -71,45 +71,8 @@ void fatal (char *str) {
     exit (EXIT_FAILURE);
 }
 
-void usage (char *prog) {
-    fprintf (stderr, "Usage: %s -c [CHANNEL] -n [NICKNAME] -u [USERNAME] -p [PASSWORD]\n"
-                "\t-u [USERNAME]\n"
-                "\t-n [NICKNAME]\n"
-                "\t-p (OPTIONAL) [PASSWORD] : Required to authenticate your nickname\n"
-                "\t-c [CHANNEL] : Required to join channel\n", prog);
-    exit (EXIT_FAILURE);
-}
-
 int main (int argc, char *argv[]) {
-    if (argc <= 4) {
-        usage (argv[0]);
-    }
-
-    int opt, uflag = 0, pflag = 0;
     SOCKET s;
-
-    //pAccount account = new_account (1);
-
-    while ((opt = getopt (argc, argv, "c:n:p:u:")) != -1) {
-        switch (opt) {
-            case 'c':
-                account->channel = optarg;
-                break;
-            case 'u':
-                uflag = 1;
-                strncpy (account->u_name, optarg, MAX_NAME-1);
-                break;
-            case 'n':
-                strncpy (account->n_name, optarg, MAX_NAME-1);
-                break;
-            case 'p':
-                pflag = 1;
-                account->pword = optarg;
-                break;
-            default:
-                usage (argv[0]);
-        }
-    }
 
     // irc_connect
     // start_recv

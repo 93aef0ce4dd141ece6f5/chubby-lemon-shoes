@@ -88,7 +88,7 @@ int main (int argc, char *argv[]) {
     int opt, uflag = 0, pflag = 0;
     SOCKET s;
 
-    //pAccount account = newAccount (1);
+    //pAccount account = new_account (1);
 
     while ((opt = getopt (argc, argv, "c:n:p:u:")) != -1) {
         switch (opt) {
@@ -111,8 +111,8 @@ int main (int argc, char *argv[]) {
         }
     }
 
-    // start_connection
-    // receive
+    // irc_connect
+    // start_recv
     
     free (account);
 

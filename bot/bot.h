@@ -50,7 +50,7 @@
  * to WIN32's SOCKET typedef
  * and linux's file descriptor
  */
-typedef SOCKET unsigned int
+typedef unsigned int SOCKET
 
 #endif
 

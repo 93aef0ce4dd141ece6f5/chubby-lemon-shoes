@@ -90,17 +90,17 @@ typedef struct _message {
  * they are called "bit fields"
  */
 struct _ip_hdr {
-    unsigned char ihl:4;
-    unsigned char version:4;
-    unsigned char tos;
-    unsigned short tot_len;
-    unsigned short id;
-    unsigned short frag_off;
-    unsigned char ttl;
-    unsigned char protocol;
-    unsigned short check;
-    unsigned long saddr;
-    unsigned long daddr;
+	unsigned char ihl:4;
+	unsigned char version:4;
+	unsigned char tos;
+	unsigned short tot_len;
+	unsigned short id;
+	unsigned short frag_off;
+	unsigned char ttl;
+	unsigned char protocol;
+	unsigned short check;
+	unsigned long saddr;
+	unsigned long daddr;
 } IP4_HDR, *pIP4_HDR;
 
 struct _udp_hdr {

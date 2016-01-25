@@ -71,7 +71,7 @@ void fatal (char *str) {
     exit (EXIT_FAILURE);
 }
 
-void print_usage (char *prog) {
+void usage (char *prog) {
     fprintf (stderr, "Usage: %s -c [CHANNEL] -n [NICKNAME] -u [USERNAME] -p [PASSWORD]\n"
                 "\t-u [USERNAME]\n"
                 "\t-n [NICKNAME]\n"
@@ -82,7 +82,7 @@ void print_usage (char *prog) {
 
 int main (int argc, char *argv[]) {
     if (argc <= 4) {
-        printUsage (argv[0]);
+        usage (argv[0]);
     }
 
     int opt, uflag = 0, pflag = 0;
@@ -107,7 +107,7 @@ int main (int argc, char *argv[]) {
                 account->pword = optarg;
                 break;
             default:
-                printUsage (argv[0]);
+                usage (argv[0]);
         }
     }
 

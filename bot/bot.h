@@ -43,7 +43,7 @@
  * script
  */
 #define SERVER     "irc.freenode.net"
-#define PORT       "6697"
+#define PORT       "6667"
 #define CHANNEL    "#nullbyte"
 #define U_NAME     "koekje"
 #define N_NAME     "koekje"

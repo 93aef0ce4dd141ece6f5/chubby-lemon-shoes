@@ -45,8 +45,8 @@
 #define SERVER     "irc.freenode.net"
 #define PORT       "6667"
 #define CHANNEL    "#nullbyte"
-#define U_NAME     "koekje"
-#define N_NAME     "koekje"
+#define U_NAME     "stom_koekje"
+#define N_NAME     "stom_koekje"
 #define PWORD      NULL
 
 //extern const char *admins[] = {"dontrustme"};
@@ -60,12 +60,17 @@
 
 #else
 
+#define SD_BOTH 0x02
+
+#define TRUE (~0)
+#define FALSE 0
+
 /*
  * a sort of hacky solution
  * to WIN32's SOCKET typedef
  * and linux's file descriptor
  */
-typedef unsigned int SOCKET
+typedef unsigned int SOCKET;
 
 #endif
 

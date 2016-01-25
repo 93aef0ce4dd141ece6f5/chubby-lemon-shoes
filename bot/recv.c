@@ -29,6 +29,7 @@
 #include <sys/socket.h>
 //getaddrinfo
 #include <netdb.h>
+#include <unistd.h>
 
 #endif
 
@@ -177,7 +178,7 @@ void start_recv (SOCKET s, pAccount account) {
 
     while (TRUE) {
         memset (output, 0, sizeof (output));
-        if ((recv_status = recv (s, output, sizeof (output), 0)) == SOCKET_ERROR) {
+        if ((recv_status = recv (s, output, sizeof (output), 0)) == -1) {
             non_fatal ("Receive");
             exit (EXIT_FAILURE);
         } else if (recv_status == 0) {

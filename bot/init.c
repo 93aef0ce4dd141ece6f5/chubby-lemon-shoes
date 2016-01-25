@@ -108,7 +108,7 @@ SOCKET irc_connect (char *addr, char *port) {
     }
     
     s = socket (res->ai_family, res->ai_socktype, res->ai_protocol);
-    if (s != 0) {
+    if (s == -1) {
         fatal ("Socket");
     }
     

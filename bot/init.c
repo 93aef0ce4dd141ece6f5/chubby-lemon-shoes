@@ -11,8 +11,8 @@
 
 #elif __linux__
 
-// getaddrinfo
 #include <sys/socket.h>
+// getaddrinfo
 #include <netdb.h>
 #endif
 

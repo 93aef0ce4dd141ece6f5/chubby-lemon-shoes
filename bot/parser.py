@@ -2,6 +2,7 @@
 
 #Imports:
 import argparse
+import sys
 from random import SystemRandom
 from string import ascii_uppercase, digits
 
@@ -27,3 +28,26 @@ if args.verbosity:
 		print(arg+" = "+str(getattr(args, arg)))
 		
 #Open the file and read it.
+modifiedfile = open("./newhead.h","w")
+with open("./bot.h","rw") as headerfile:
+	while True:
+		line = headerfile.readline()
+		if not line: break
+		if "#define SERVER" in line:
+			modifiedfile.write("#define SERVER\t"+'"'+args.server+'"\n')
+		elif "#define PORT" in line:
+			modifiedfile.write("#define PORT\t"+str(args.port)+"\n")
+		elif "#define CHANNEL" in line:
+			modifiedfile.write("#define CHANNEL\t"+'"'+args.channel+'"\n')
+		elif "#define U_NAME" in line:
+			modifiedfile.write("#define U_NAME\t"+'"'+args.username+'"\n')
+		elif "#define N_NAME" in line:
+			modifiedfile.write("#define N_NAME\t"+'"'+args.nickname+'"\n')
+		elif "#define PWORD" in line and args.password:
+			modifiedfile.write("#define PWORD\t"+'"'+args.password+'"\n')
+		elif "#define PWORD" in line and not args.password:
+			modifiedfile.write("#define PWORD\tNULL\n")
+		#if "//extern" in line: #admins would go here
+		#	modifiedfile.write("#define SERVER\t"+args.server)
+		else:
+			modifiedfile.write(line)

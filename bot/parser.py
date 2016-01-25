@@ -25,6 +25,7 @@ args = parser.parse_args()
 
 
 
+
 #Print parsed options if verbosity is increased.
 if args.verbosity:
 	for arg in vars(args):

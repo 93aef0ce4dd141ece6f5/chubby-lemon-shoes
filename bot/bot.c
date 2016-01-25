@@ -18,40 +18,53 @@
 /* 
  * setopt() to parse
  * command line options
+ */
 #include <unistd.h>
 
+/*
+ * compiling for WIN32 machines
+ * include the folllowing
+ */
+#ifdef _WIN32
 /*
  * GetLastError() for
  * error checking
  */
 #include <windows.h>
 
-void non_fatal (char *str, int type) {
-    //#ifdef DEBUG
-    if (type == WINDOWS) {
-        int err = 0;
-        if ((err = (int)GetLastError())) {
-            fprintf (stderr, "[!] %s error: %d\n", str, err);
-        }
-    } else if (type == POSIX) {
-        perror (str);
+/*
+ * compiling for linux machines
+ * include the folllowing
+ */
+#elif __linux__
+
+#include <errno.h>
+
+#endif
+
+void non_fatal (char *str) {
+    #ifdef _WIN32
+    int err = 0;
+    if ((err = (int)GetLastError())) {
+        fprintf (stderr, "[!] %s error: %d\n", str, err);
     }
-    //#endif
+    #elif __linux__
+    fprintf (stderr, "[!] %s error: %s\n", str, strerror (errno));
+    #endif
 }
 
-void fatal (char *str, int type) {
-    //#ifdef DEBUG
-    if (type == WINDOWS) {
-        int err = 0;
-        if ((err = (int)GetLastError())) {
-            fprintf (stderr, "[!] %s error: %d\n", str, err);
-        }
-    } else if (type == POSIX) {
-        perror (str);
+void fatal (char *str) {
+    #ifdef _WIN32
+    int err = 0;
+    if ((err = (int)GetLastError())) {
+        fprintf (stderr, "[!] %s error: %d\n", str, err);
     }
-    //#endif
+    #elif __linux__
+    fprintf (stderr, "[!] %s error: %s\n", str, strerror (errno));
+    #endif
     exit (EXIT_FAILURE);
 }
+
 void print_usage (char *prog) {
     fprintf (stderr, "Usage: %s -c [CHANNEL] -n [NICKNAME] -u [USERNAME] -p [PASSWORD]\n"
                 "\t-u [USERNAME]\n"

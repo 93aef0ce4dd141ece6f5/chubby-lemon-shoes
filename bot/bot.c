@@ -44,13 +44,6 @@
  */
 #include <errno.h>
 
-/*
- * a sort of hacky solution
- * to WIN32's SOCKET typedef
- * and linux's file descriptor
- */
-typedef SOCKET unsigned int
-
 #endif
 
 void non_fatal (char *str) {

@@ -1,3 +1,16 @@
+/*
+ * Title: bot.c
+ * Description: file includes main and other error
+ *              checking functions, fatal kills 
+ *              program on error, non_fatal does not
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -13,7 +26,7 @@
  */
 #include <windows.h>
 
-void nonFatal (char *str, int type) {
+void non_fatal (char *str, int type) {
     //#ifdef DEBUG
     if (type == WINDOWS) {
         int err = 0;
@@ -39,7 +52,7 @@ void fatal (char *str, int type) {
     //#endif
     exit (EXIT_FAILURE);
 }
-void printUsage (char *prog) {
+void print_usage (char *prog) {
     fprintf (stderr, "Usage: %s -c [CHANNEL] -n [NICKNAME] -u [USERNAME] -p [PASSWORD]\n"
                 "\t-u [USERNAME]\n"
                 "\t-n [NICKNAME]\n"

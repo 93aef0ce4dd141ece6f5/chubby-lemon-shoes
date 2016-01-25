@@ -46,6 +46,8 @@
 
 #endif
 
+#include "bot.h"
+
 void non_fatal (char *str) {
     #ifdef _WIN32
     int err = 0;

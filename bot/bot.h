@@ -36,11 +36,14 @@
 
 #define zeroMem(x) memset((x), 0, sizeof (x));
 
+#ifdef _WIN32
 /*
  * macro for easier sleep
  * times sleep (seconds)
  */
 #define sleep(x) Sleep ((x)*1000);
+
+#endif
 
 /*
  * struct containing IRC
@@ -71,14 +74,12 @@ typedef struct _message {
 } Message, *pMessage;
 
 /*
- * definitions for
- * error checking
+ * function definitions go here
+ * please make sure that only
+ * functions which carry across
+ * are added here, else make 
+ * it static
  */
-enum {
-	WINDOWS,
-	POSIX
-};
-
 // bot.c
 void non_fatal (char *, int);
 void fatal (char *, int);

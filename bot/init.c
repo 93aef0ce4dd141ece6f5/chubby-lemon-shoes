@@ -126,11 +126,13 @@ SOCKET irc_connect (char *addr, char *port) {
  */
 int setup_irc (SOCKET s, pAccount account) {
     // need to remove magic numbers
-    char set_nick[strlen(account->n_name) + 9];
-    char set_user[strlen(account->u_name) + 21];
+    char set_nick[strlen (account->n_name) + 9];
+    char set_user[strlen (account->u_name) + 21];
+    char join_chan[strlen (account->channel) + 8];
 
     snprintf (set_nick, sizeof (set_nick), "NICK %s\r\n", account->n_name);
     snprintf (set_user, sizeof (set_user), "USER %s 0 * :~bot~\r\n", account->u_name);
+    snprintf (join_chan, sizeof (join_chan), "JOIN %s\r\n", account->channel);
 
     if (send (s, set_nick, strlen (set_nick), 0) == -1) {
         fatal ("Send nickname");
@@ -138,6 +140,10 @@ int setup_irc (SOCKET s, pAccount account) {
 
     if (send (s, set_user, strlen (set_user), 0) == -1) {
         fatal ("Send username");
+    }
+
+    if (send (s, join_chan, strlen (join_chan), 0) == -1) {
+        fatal ("Join chan");
     }
 
     return EXIT_SUCCESS;

@@ -25,17 +25,7 @@
  * function to close sockets, free
  * heap allocs in account and message
  */
-void cleanup (SOCKET s, pAccount a, pMessage m) {
-    // close socket
-    shutdown (s, SD_BOTH);
-    
-    #ifdef _WIN32
-    closesocket (s);
-    WSACleanup();
-    #elif
-    close (s);
-    #endif
-    
+int cleanup (SOCKET s, pAccount a, pMessage m) {
     // free heap allocs
     if (p != NULL) {
         free (p);
@@ -48,6 +38,31 @@ void cleanup (SOCKET s, pAccount a, pMessage m) {
         free (m->msg);
         free (m);
     }
+    
+	int err = 0;
+    // close socket
+    err = shutdown (s, SD_BOTH);
+    if (err == -1) {
+    	return err;
+    }
+    
+    #ifdef _WIN32
+    err = closesocket (s);
+    if (err == SOCKET_ERROR) {
+    	return err;
+    }
+    err = WSACleanup();
+    if (err == SOCKET_ERROR) {
+    	return err;
+    }
+    
+    #elif __linux__
+    
+    err = close (s);
+    if (err == -1) {
+    	return err;
+    }
+    #endif
 }
 
 /*
@@ -140,7 +155,7 @@ void start_recv (SOCKET s, pAccount account) {
     int recv_status;
     char output[MAX_MSG_SIZE];
 
-    pMessage message = newMessage();
+    pMessage message = new_message();
     if (message == NULL) {
         fatal ("Message struct failed");
     }

@@ -166,7 +166,7 @@ void start_recv (SOCKET s, pAccount account) {
             non_fatal ("Receive");
             exit (EXIT_FAILURE);
         } else if (recv_status == 0) {
-            fprintf (stderr, "Connection closed by server\n");
+            non_fatal ("Receive");
         }
 
         if (!strncmp (output, "PING", 4)) {

@@ -42,10 +42,10 @@
  * options with a python
  * script
  */
-#define SERVER 	irc.freenode.net
-#define CHANNEL #nullbyte
-#define U_NAME 	koekje
-#define N_NAME 	koekje
+#define SERVER 	"irc.freenode.net"
+#define CHANNEL "#nullbyte"
+#define U_NAME 	"koekje"
+#define N_NAME 	"koekje"
 #define PWORD 	NULL
 
 char *admins[] = {"dontrustme"};

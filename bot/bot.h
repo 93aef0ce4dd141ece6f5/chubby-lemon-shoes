@@ -43,12 +43,13 @@
  * script
  */
 #define SERVER     "irc.freenode.net"
+#define PORT       "6697"
 #define CHANNEL    "#nullbyte"
 #define U_NAME     "koekje"
 #define N_NAME     "koekje"
 #define PWORD      NULL
 
-char *admins[] = {"dontrustme"};
+//extern const char *admins[] = {"dontrustme"};
 
 #ifdef _WIN32
 /*
@@ -164,15 +165,16 @@ struct _tcp_hdr {
  * yet exist, please make one
  */
 // bot.c
-void non_fatal (char *, int);
-void fatal (char *, int);
+void non_fatal (char *);
+void fatal (char *);
 
 // init.c
 pAccount new_account (void);
 pMessage new_message (void);
 SOCKET irc_connect (char *, char *);
-int setup_irc (SOCKET , pAccount);
+int setup_irc (SOCKET, pAccount);
 void str_to_lower (char *);
+void format_message (pMessage);
 
 // recv.c
 int cleanup (SOCKET, pAccount, pMessage);

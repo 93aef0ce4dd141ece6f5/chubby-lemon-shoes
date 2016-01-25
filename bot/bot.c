@@ -74,8 +74,16 @@ void fatal (char *str) {
 int main (int argc, char *argv[]) {
     SOCKET s;
 
-    // irc_connect
-    // start_recv
+    pAccount account = new_account();
+    if (account == NULL) {
+        fatal ("New account");
+    }
+
+    s = irc_connect (SERVER, PORT);
+
+    setup_irc (s, account);
+    
+    start_recv (s, account);
     
     free (account);
 

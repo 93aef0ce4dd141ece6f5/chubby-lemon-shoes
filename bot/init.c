@@ -25,13 +25,17 @@
 pAccount new_account (void) {
 	pAccount a = malloc (sizeof (*a));
 	if (a == NULL) {
-		fatal ("[!] Account struct malloc", POSIX);
+		return a;
 	}
 
 	memset (a->u_name, 0, MAX_NAME);
 	memset (a->n_name, 0, MAX_NAME);
-	a->pword = NULL;
-	a->channel = NULL;
+
+	strncpy (a->u_name, U_NAME, MAX_NAME);
+	strncpy (a->n_name, N_NAME, MAX_NAME);
+
+	a->pword = PWORD;
+	a->channel = CHANNEL;
 	return a;
 }
 
@@ -172,7 +176,7 @@ static void trim_string (char *s) {
 			}
 		}
 		*/
-		str[strlen (str)-2] = '\0';
+		s[strlen (s)-2] = '\0';
 	}
 }
 

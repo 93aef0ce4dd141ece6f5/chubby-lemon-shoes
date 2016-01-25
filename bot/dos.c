@@ -26,6 +26,8 @@
 
 #endif
 
+#include "bot.h"
+
 /*
  * do we want to thread or 
  * fork the flood routines

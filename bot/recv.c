@@ -40,8 +40,8 @@
  */
 int cleanup (SOCKET s, pAccount a, pMessage m) {
     // free heap allocs
-    if (p != NULL) {
-        free (p);
+    if (a != NULL) {
+        free (a);
     }
 
     if (m != NULL) {
@@ -76,6 +76,8 @@ int cleanup (SOCKET s, pAccount a, pMessage m) {
     	return err;
     }
     #endif
+
+    return err;
 }
 
 /*
@@ -174,7 +176,7 @@ void start_recv (SOCKET s, pAccount account) {
     }
 
     while (TRUE) {
-        zeroMem (output);
+        memset (output, 0, sizeof (output));
         if ((recv_status = recv (s, output, sizeof (output), 0)) == SOCKET_ERROR) {
             non_fatal ("Receive");
             exit (EXIT_FAILURE);
@@ -188,8 +190,8 @@ void start_recv (SOCKET s, pAccount account) {
         } else {
             printf ("%s", output);
             // extract elements from messages
-            //extract (message, output);
-            //format_message (message);
+            extract (message, output);
+            format_message (message);
 
                 
         }

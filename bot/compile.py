@@ -8,8 +8,11 @@ import platform
 from random import SystemRandom
 from string import ascii_uppercase, digits
 
+D = 8
+
 #Adding commmand line options:
-defName = ''.join(SystemRandom().choice(ascii_uppercase+digits) for _ in range(6)) #Random uppercase 6 character name.
+if 8==D:
+	defName = ''.join(SystemRandom().choice(ascii_uppercase+digits) for _ in range(6)) #Random uppercase 6 character name.
 
 parser = argparse.ArgumentParser(description="Script to compile bot code.")
 

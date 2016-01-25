@@ -1,9 +1,23 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+/*
+ * networking functions go here
+ */
+#ifdef _WIN32
+
 #include <winsock2.h>
 #include <ws2tcpip.h>
 #include <windows.h>
+
+#elif __linux__
+
+#include <sys/socket.h>
+#include <netdb.h>
+#include <arpa/inet.h>
+
+#endif
 
 #include "bot.h"
 
@@ -14,8 +28,13 @@
 void cleanup (SOCKET s, pAccount a, pMessage m) {
     // close socket
     shutdown (s, SD_BOTH);
+    
+    #ifdef _WIN32
     closesocket (s);
     WSACleanup();
+    #elif
+    close (s);
+    #endif
     
     // free heap allocs
     if (p != NULL) {
@@ -117,7 +136,7 @@ static void extract (pMessage m, char *s) {
 /*
  * function to receive data from the chat
  */
-void startRecv (SOCKET s, pAccount account) {
+void start_recv (SOCKET s, pAccount account) {
     int recv_status;
     char output[MAX_MSG_SIZE];
 
@@ -129,7 +148,7 @@ void startRecv (SOCKET s, pAccount account) {
     while (TRUE) {
         zeroMem (output);
         if ((recv_status = recv (s, output, sizeof (output), 0)) == SOCKET_ERROR) {
-            nonFatal ("Receive", WINDOWS);
+            non_fatal ("Receive");
             exit (EXIT_FAILURE);
         } else if (recv_status == 0) {
             fprintf (stderr, "Connection closed by server\n");

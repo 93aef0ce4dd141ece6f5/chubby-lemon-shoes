@@ -1,3 +1,20 @@
+/*
+ * Title: bot.h
+ * Description: file contains miscellaneous 
+ *              definitions, function definitions
+ *              and structs
+ *
+ *
+ *
+ *
+ *
+ *
+ */
+
+/*
+ * header guards to prevent
+ * double includes
+ */
 #ifndef BOT_H
 #define BOT_H
 
@@ -63,7 +80,7 @@ enum {
 };
 
 // bot.c
-void nonFatal (char *, int);
+void non_fatal (char *, int);
 void fatal (char *, int);
 
 #endif

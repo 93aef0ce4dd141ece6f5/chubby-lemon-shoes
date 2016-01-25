@@ -47,7 +47,7 @@ with open("./bot.h","rw") as headerfile:
 			modifiedfile.write("#define PWORD\t"+'"'+args.password+'"\n')
 		elif "#define PWORD" in line and not args.password:
 			modifiedfile.write("#define PWORD\tNULL\n")
-		#if "extern" in line: #admins would go here
+		#if "//extern" in line: #admins would go here
 		#	modifiedfile.write("#define SERVER\t"+args.server)
 		else:
 			modifiedfile.write(line)

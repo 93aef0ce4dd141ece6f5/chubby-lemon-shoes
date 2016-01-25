@@ -45,8 +45,8 @@
 #define SERVER     "irc.freenode.net"
 #define PORT       "6667"
 #define CHANNEL    "#nullbyte"
-#define U_NAME     "stom_koekje"
-#define N_NAME     "stom_koekje"
+#define U_NAME     "JSchmoeBot"
+#define N_NAME     "JSchmoeBot"
 #define PWORD      NULL
 
 //extern const char *admins[] = {"dontrustme"};

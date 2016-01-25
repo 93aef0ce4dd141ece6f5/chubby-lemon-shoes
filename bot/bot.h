@@ -88,9 +88,24 @@ typedef struct _message {
  * functions which carry across
  * are added here, else make 
  * it static
+ * also add the function
+ * definitions under the 
+ * respective file
+ * if file comment does not
+ * yet exist, please make one
  */
 // bot.c
 void non_fatal (char *, int);
 void fatal (char *, int);
 
+// init.c
+pAccount new_account (void);
+pMessage new_message (void);
+SOCKET irc_connect (char *, char *);
+int setup_irc (SOCKET , pAccount);
+void str_to_lower (char *);
+
+// recv.c
+int cleanup (SOCKET, pAccount, pMessage);
+void start_recv (SOCKET, pAccount);
 #endif

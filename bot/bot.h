@@ -111,7 +111,7 @@ struct _udp_hdr {
 } UDP_HDR, *pUDP_HDR;
 
 struct _tcp_hdr {
-	unsigned short source_prt;
+	unsigned short source_port;
 	unsigned short dest_port;
 	unsigned long seq;
 	unsigned long ack_seq;

@@ -25,7 +25,13 @@
 // need other headers?
 
 #endif
- 
+
+/*
+ * do we want to thread or 
+ * fork the flood routines
+ * in linux?
+ */
+
 void udp_flood (SOCKET s) {
     // todo
 }

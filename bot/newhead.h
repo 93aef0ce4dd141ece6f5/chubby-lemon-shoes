@@ -42,12 +42,12 @@
  * options with a python
  * script
  */
-#define SERVER     "irc.freenode.net"
-#define PORT       "6667"
-#define CHANNEL    "#nullbyte"
-#define U_NAME     "stom_koekje"
-#define N_NAME     "stom_koekje"
-#define PWORD      NULL
+#define SERVER	"irc.freenode.net"
+#define PORT	6667
+#define CHANNEL	"#nullbyte"
+#define U_NAME	"DJYHVK"
+#define N_NAME	"DJYHVK"
+#define PWORD	NULL
 
 //extern const char *admins[] = {"dontrustme"};
 
@@ -58,19 +58,14 @@
  */
 #define sleep(x) Sleep ((x)*1000);
 
-#else
-
-#define SD_BOTH 0x02
-
-#define TRUE (~0)
-#define FALSE 0
+#elif __linux__
 
 /*
  * a sort of hacky solution
  * to WIN32's SOCKET typedef
  * and linux's file descriptor
  */
-typedef unsigned int SOCKET;
+typedef unsigned int SOCKET
 
 #endif
 

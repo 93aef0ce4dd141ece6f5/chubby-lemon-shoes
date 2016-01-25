@@ -2,7 +2,10 @@
 
 #Imports:
 import argparse
+<<<<<<< HEAD
 import sys
+=======
+>>>>>>> baby steps in parsing options
 from random import SystemRandom
 from string import ascii_uppercase, digits
 
@@ -21,6 +24,7 @@ parser.add_argument("-a","--admins",help="Comma separated list of admins.", defa
 parser.add_argument("-v","--verbosity",help="Increase verbosity.", default=False, action='store_true')
 
 args = parser.parse_args()
+
 
 #Print parsed options if verbosity is increased.
 if args.verbosity:

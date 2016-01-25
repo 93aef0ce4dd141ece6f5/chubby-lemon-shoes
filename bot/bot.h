@@ -83,6 +83,57 @@ typedef struct _message {
 } Message, *pMessage;
 
 /*
+ * need to define some tcp/ip
+ * header structs here 
+ * the X:n means that it
+ * takes up n bits
+ * they are called "bit fields"
+ */
+struct _ip_hdr {
+    unsigned char ihl:4 
+    unsigned char version:4;
+    unsigned char tos;
+    unsigned short tot_len;
+    unsigned short id;
+    unsigned short frag_off;
+    unsigned char ttl;
+    unsigned char protocol;
+    unsigned short check;
+    unsigned long saddr;
+    unsigned long daddr;
+} IP4_HDR, *pIP4_HDR;
+
+struct _udp_hdr {
+    unsigned short source_port;
+    unsigned short dest_port;
+    unsigned short len;
+    unsigned short check;
+} UDP_HDR, *pUDP_HDR;
+
+struct _tcp_hdr {
+    unsigned short source_prt;
+    unsigned short dest_port;
+    unsigned long seq;
+    unsigned long ack_seq;
+    unsigned short res1:4
+    unsigned short data_offset:4;
+    
+    // flags
+  	unsigned char fin:1 
+  	unsigned char syn:1
+  	unsigned char rst:1
+  	unsigned char psh:1
+  	unsigned char ack:1
+  	unsigned char urg:1
+  	unsigned char ece:1
+  	unsigned char cwr:1;
+  
+    unsigned short window;
+    unsigned short check;
+    unsigned short urg_ptr;
+} TCP_HDR, *pTCP_HDR;
+
+/*
  * function definitions go here
  * please make sure that only
  * functions which carry across

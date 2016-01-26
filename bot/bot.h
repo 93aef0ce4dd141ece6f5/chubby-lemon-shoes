@@ -58,7 +58,7 @@
  */
 #define sleep(x) Sleep ((x)*1000);
 
-#else
+#elif defined(__linux__)
 
 #define SD_BOTH 0x02
 

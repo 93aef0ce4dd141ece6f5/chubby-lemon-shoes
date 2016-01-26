@@ -36,7 +36,7 @@
  * compiling for linux machines
  * include the folllowing
  */
-#else
+#elif defined(__linux__)
 
 /*
  * errno value required
@@ -54,7 +54,7 @@ void non_fatal (char *str) {
     if ((err = (int)GetLastError())) {
         fprintf (stderr, "[!] %s error: %d\n", str, err);
     }
-    #else
+    #elif defined(__linux__)
     fprintf (stderr, "[!] %s error: %s\n", str, strerror (errno));
     #endif
 }
@@ -65,7 +65,7 @@ void fatal (char *str) {
     if ((err = (int)GetLastError())) {
         fprintf (stderr, "[!] %s error: %d\n", str, err);
     }
-    #else
+    #elif defined(__linux__)
     fprintf (stderr, "[!] %s error: %s\n", str, strerror (errno));
     #endif
     exit (EXIT_FAILURE);

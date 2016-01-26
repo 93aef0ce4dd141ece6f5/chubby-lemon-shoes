@@ -24,7 +24,7 @@
 #include <ws2tcpip.h>
 #include <windows.h>
 
-#else
+#elif defined(__linux__)
 
 #include <sys/socket.h>
 //getaddrinfo
@@ -70,7 +70,7 @@ int cleanup (SOCKET s, pAccount a, pMessage m) {
     	return err;
     }
     
-    #else
+    #elif defined(__linux__)
     
     err = close (s);
     if (err == -1) {

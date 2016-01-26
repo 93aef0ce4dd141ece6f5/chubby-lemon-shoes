@@ -1,0 +1,21 @@
+bot.c
+1. add client options
+    - install startup into registry
+    - implement window stealth
+    - install program as service
+        > need to revise service management
+
+init.c
+
+recv.c
+1. add more commands
+    - help command
+    - dos commands
+    
+exec.c
+1. fix admin addition
+2. need to add my_send function
+3. need option parser from message->msg for dos options
+
+dos.c
+1. do udp_flood and syn_flood functions

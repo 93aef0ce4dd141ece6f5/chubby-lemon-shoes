@@ -41,15 +41,20 @@
 #include "bot.h"
 
 /*
- * do we want to thread or 
- * fork the flood routines
- * in linux?
+ * udp flood
+ * max packet data
+ * and send out as many
+ * packets as possible
  */
-
 void udp_flood (SOCKET s) {
     // todo
 }
  
+/*
+ * syn flood
+ * randomise source ip
+ * randomise dest port?
+ */
 void syn_flood (SOCKET s) {
     // todo
 }

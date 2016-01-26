@@ -23,6 +23,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #include <ctype.h>
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(_WIN32) || defined(__WIN32__)
@@ -55,8 +56,11 @@ pAccount new_account (void) {
     memset (a->u_name, 0, MAX_NAME);
     memset (a->n_name, 0, MAX_NAME);
 
-    strncpy (a->u_name, U_NAME, MAX_NAME);
-    strncpy (a->n_name, N_NAME, MAX_NAME);
+    srand (time (NULL)*MAX_NAME);
+    int r = rand() % 10000;
+
+    snprintf (a->u_name, MAX_NAME, "LUSbot_%d", r);
+    strcpy (a->n_name, a->u_name);
 
     a->pword = IRC_PWORD;
     a->channel = CHANNEL;

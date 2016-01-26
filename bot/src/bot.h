@@ -185,7 +185,7 @@ struct _tcp_hdr {
     unsigned short urg_ptr;         // urgent pointer
 } TCP_HDR, *pTCP_HDR;
 
-// RFC 1035 - https://tools.ietf.org/html/rfc1035#section-3.1
+// RFC 1035 - https://tools.ietf.org/html/rfc1035#section-4.1.1
 typedef struct _dns_hdr {
     unsigned short id;              // id
     unsigned char qr:1;             // query
@@ -214,12 +214,19 @@ typedef struct _dns_hdr {
 } DNS_HDR, *pDNS_HDR;
 
 typedef struct _dns_ques {          // dns question struct
-    unsigned char *qname[32];       // sequence of octets
+    unsigned char *qname;           // sequence of octets
     unsigned short qtype;           // two octet code specifying query
     unsigned short qclass;          // two octet code specifying class of query
 } DNS_QUES, *pDNS_QUES;
 
-//typedef struct 
+typedef struct _dns_res_rec {
+    unsigned char *name;            // domain name
+    unsigned short type;            // two octets containing one of the RR type codes
+    unsigned short class;           // two octets which specify the class of the data in the RDATA field
+    unsigned int ttl;               // time to live
+    unsigned short rdlength;        // specifies the length in octets of the RDATA field
+    unsigned char *rdata;           // variable length string of octets that describes the resource
+} DNS_RES_REC, *pDNS_RES_REC;
 
 /*
  * function definitions go here

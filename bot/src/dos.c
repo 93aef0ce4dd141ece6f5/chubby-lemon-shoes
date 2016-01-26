@@ -58,3 +58,7 @@ void udp_flood (SOCKET s) {
 void syn_flood (SOCKET s) {
     // todo
 }
+
+void dns_amp (SOCKET s) {
+	// todo
+}

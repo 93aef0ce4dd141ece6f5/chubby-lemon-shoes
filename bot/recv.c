@@ -39,10 +39,11 @@
  * function to close sockets, free
  * heap allocs in account and message
  */
-int cleanup (SOCKET s, pAccount a, pMessage m) {
+int cleanup (SOCKET s, pAccount account, pMessage m) {
     // free heap allocs
-    if (a != NULL) {
-        free (a);
+    if (account != NULL) {
+        free (account->admins);
+        free (account);
     }
 
     if (m != NULL) {
@@ -196,7 +197,28 @@ void start_recv (SOCKET s, pAccount account) {
             extract (message, output);
             format_message (message);
 
-                
+            if (strncmp (message->command, "!", 1) == 0) {
+                // authenticate as admin
+                if (strncmp (message->command, "!authenticate", 13) == 0) {
+                    // check password
+                    if (check_pass (message)) {
+                        if (add_admin (account, message) == FALSE) {
+                            // admin list expansion error
+                            int i;
+                            for (i = 0; i < account->num_admins; i++) {
+                                printf ("Admin[%d]: %s\n", i, account->admins[i]);
+                            }
+                        }
+                    } else {
+                        // deny access
+                    }
+                // check if user is admin
+                } else if (is_admin (account, message)) {
+                    // execute order 66
+                } else {
+                    // deny access
+                }
+            }
         }
     }
     

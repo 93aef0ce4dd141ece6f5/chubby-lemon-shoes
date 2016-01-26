@@ -39,11 +39,15 @@
  * function to close sockets, free
  * heap allocs in account and message
  */
-int cleanup (SOCKET s, pAccount account, pMessage m) {
+int cleanup (SOCKET s, pAccount a, pMessage m) {
     // free heap allocs
-    if (account != NULL) {
-        free (account->admins);
-        free (account);
+    if (a != NULL) {
+        int i;
+        for (i = 0; i < a->admin_size; i++) {
+            free (a->admins[i]);
+        }
+        free (a->admins);
+        free (a);
     }
 
     if (m != NULL) {
@@ -197,20 +201,24 @@ void start_recv (SOCKET s, pAccount account) {
             extract (message, output);
             format_message (message);
 
-            if (strncmp (message->command, "!", 1) == 0) {
+            if (strncmp (message->command, "$", 1) == 0) {
                 // authenticate as admin
-                if (strncmp (message->command, "!authenticate", 13) == 0) {
+                if (strncmp (message->command, "$authenticate", 13) == 0) {
                     // check password
-                    if (check_pass (message)) {
-                        if (add_admin (account, message) == FALSE) {
-                            // admin list expansion error
+                    if (check_pass (message->param)) {
+                        printf ("Pass is correct\n");
+                        if (add_admin (account, message)) {
                             int i;
                             for (i = 0; i < account->num_admins; i++) {
                                 printf ("Admin[%d]: %s\n", i, account->admins[i]);
                             }
+                        } else {
+                            // admin list expansion error
+                            non_fatal ("Admin array realloc");
                         }
                     } else {
                         // deny access
+                        printf ("Pass is incorrect\n");
                     }
                 // check if user is admin
                 } else if (is_admin (account, message)) {
@@ -220,6 +228,7 @@ void start_recv (SOCKET s, pAccount account) {
                 }
             }
         }
+        // loop
     }
     
     err = cleanup (s, account, message);

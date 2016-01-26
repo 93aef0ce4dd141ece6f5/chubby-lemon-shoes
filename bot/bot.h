@@ -44,13 +44,13 @@
  */
 #define SERVER     "irc.freenode.net"
 #define PORT       "6667"
-#define CHANNEL    "#nullbyte"
+#define CHANNEL    "#uuiiafa"
 #define U_NAME     "JSchmoeBot"
 #define N_NAME     "JSchmoeBot"
 #define IRC_PWORD  NULL
 #define BOT_PWORD  "test123"  
 
-extern const char *default_admins[] = {"dontrustme"};
+extern char *default_admins[];
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__)
 /*
@@ -85,7 +85,8 @@ typedef struct _account {
     char *pword;            // username's password
     char *channel;            // channel/privmsg
     char **admins;
-    unsigned short num_admins;
+    unsigned short admin_size;    // size of admins array
+    unsigned short num_admins;    // number of admins
 } Account, *pAccount;
 
 /*
@@ -216,7 +217,7 @@ int cleanup (SOCKET, pAccount, pMessage);
 void start_recv (SOCKET, pAccount);
 
 // exec.c
-int check_pass (pMessage);
+int check_pass (char *);
 int add_admin (pAccount, pMessage);
 int is_admin (pAccount, pMessage);
 

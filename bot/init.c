@@ -18,6 +18,8 @@
 
 #include "bot.h"
 
+char *default_admins[] = {"dontrustme"};
+
 /*
  * function to initlialise the
  * account struct
@@ -34,17 +36,18 @@ pAccount new_account (void) {
 	strncpy (a->u_name, U_NAME, MAX_NAME);
 	strncpy (a->n_name, N_NAME, MAX_NAME);
 
-	a->pword = PWORD;
+	a->pword = IRC_PWORD;
 	a->channel = CHANNEL;
-	a->num_admins = sizeof (admins)/sizeof (*admins);
-	a->admins = malloc (num_admins);
+	a->admin_size = sizeof (default_admins)/sizeof (*default_admins);
+	a->num_admins = a->admin_size;
+	a->admins = malloc (sizeof (char *)*a->num_admins);
 	if (a->admins == NULL) {
 		return a;
 	}
 
 	int i;
-	for (i = 0; i < num_admins; i++) {
-		a->admin[i] = default_admins[i];
+	for (i = 0; i < a->admin_size; i++) {
+		a->admins[i] = default_admins[i];
 	}
 
 	return a;
@@ -185,17 +188,14 @@ void str_to_lower (char *s) {
  */
 static void trim_string (char *s) {
 	if (s != NULL) {
-		/*
 		int i;
 
-		for (i = 0; i < strlen (s); i++) {
+		for (i = strlen (s)-10; i < strlen (s); i++) {
 			if (s[i] == '\r' || s[i] == '\n') {
 				s[i] = '\0';
 				break;
 			}
 		}
-		*/
-		s[strlen (s)-2] = '\0';
 	}
 }
 

@@ -69,5 +69,5 @@ void syn_flood (SOCKET s) {
  * in the header file
  */
 void dns_amp (SOCKET s) {
-	// todo
+    // todo
 }

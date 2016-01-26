@@ -114,36 +114,36 @@ typedef struct _message {
 struct _ip_hdr {
     unsigned char ihl:4;            // ip header len
     unsigned char version:4;        // ipv4
-    unsigned char tos;                // type of service
-    unsigned short tot_len;            // total length
-    unsigned short id;                // unique id
+    unsigned char tos;              // type of service
+    unsigned short tot_len;         // total length
+    unsigned short id;              // unique id
     unsigned short frag_off;        // fragment offset
-    unsigned char ttl;                // time to live
-    unsigned char protocol;            // tcp, udp, etc.
-    unsigned short check;            // checksum
-    unsigned long src_addr;            // source addr
+    unsigned char ttl;              // time to live
+    unsigned char protocol;         // tcp, udp, etc.
+    unsigned short check;           // checksum
+    unsigned long src_addr;         // source addr
     unsigned long dest_addr;        // dest addr
 } IP4_HDR, *pIP4_HDR;
 
 // RFC 768 - https://www.ietf.org/rfc/rfc768.txt
 struct _udp_hdr {
     unsigned short src_port;        // source port
-    unsigned short dest_port;        // dest port
-    unsigned short len;                // length
-    unsigned short check;            // checksum
+    unsigned short dest_port;       // dest port
+    unsigned short len;             // length
+    unsigned short check;           // checksum
 } UDP_HDR, *pUDP_HDR;
 
 // RFC 793 - https://tools.ietf.org/html/rfc793#section-3.1
 struct _tcp_hdr {
     unsigned short src_port;        // source port
-    unsigned short dest_port;        // dest port
-    unsigned long seq;                // sequence no.
-    unsigned long ack_seq;            // ack no.
-    unsigned short res1:4;            // reserved
-    unsigned short data_off:4;        // data offset
+    unsigned short dest_port;       // dest port
+    unsigned long seq;              // sequence no.
+    unsigned long ack_seq;          // ack no.
+    unsigned short res1:4;          // reserved
+    unsigned short data_off:4;      // data offset
     
     // flags
-    unsigned char fin:1;             // finish
+    unsigned char fin:1;            // finish
     unsigned char syn:1;            // synchronise
     unsigned char rst:1;            // reset
     unsigned char psh:1;            // push
@@ -152,10 +152,37 @@ struct _tcp_hdr {
     unsigned char ece:1;            // ecn echo
     unsigned char cwr:1;            // congestion window reduced
     
-    unsigned short window;            // window
-    unsigned short check;            // checksum
-    unsigned short urg_ptr;            // urgent pointer
+    unsigned short window;          // window
+    unsigned short check;           // checksum
+    unsigned short urg_ptr;         // urgent pointer
 } TCP_HDR, *pTCP_HDR;
+
+typedef struct _dns_hdr {
+    unsigned short id;              // id
+    unsigned char qr:1;             // query
+    unsigned char op:4;             // opcode
+    
+    unsigned char aa:1;             // authorative answer
+    unsigned char tc:1;             // truncation
+    unsigned char rd:1;             // recursion desired
+    unsigned char ra:1;             // recursion available
+    
+    /*
+     * rcode errors:
+     * 0 - no error
+     * 1 - format error
+     * 2 - server failure
+     * 3 - Name error
+     * 4 - Not implemented
+     * 5 - Refused
+     */
+    unsigned char rcode:4;          // response code
+    unsigned char z:3;              // reserved
+    unsigned short qdc;             // no. of question entries; 1 - one question
+    unsigned short anc;             // no. of resource records; 0 - not providing question
+    unsigned short nsc;             // no. of name server resource records; 0 - ignore response entries
+    unsigned short arc;             // no. of resource records in additional records section; 0 - ignore response enries
+} DNS_HDR, *pDNS_HDR;
 
 /*
  * function definitions go here

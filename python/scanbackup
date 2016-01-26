@@ -1,0 +1,15 @@
+#!/usr/bin/env python
+import logging
+logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
+from scapy.all import *
+
+finalips = ["217.31.208.12"]
+for ip in finalips:
+	
+	answer = sr1(IP(dst=ip)/UDP(dport=53)/DNS(rd=1,qd=DNSQR(qname="stackexchange.com", qtype="ALL")),verbose=0, timeout=1)
+	try:
+		print answer[DNS].summary()
+		print("Sent packet of size: "+str(len(IP(dst=ip)/UDP(dport=53)/DNS(rd=1,qd=DNSQR(qname="stackexchange.com",qtype="ALL")))))
+		print(str(ip)+" returned reply of length: "+str(len(answer)))
+	except:
+		print(str(ip)+" is not a valid DNS server")

@@ -1,9 +1,9 @@
 /*
- * Author           : 93aef0ce4dd141ece6f5
- * Title            : bot.c
- * Description      : file includes main and other error
- *                      checking functions, fatal kills 
- *                      program on error, non_fatal does not
+ *   Author           : 93aef0ce4dd141ece6f5
+ *   Title            : bot.c
+ *   Description      : file includes main and other error
+ *                        checking functions, fatal kills 
+ *                        program on error, non_fatal does not
  *
  * 
  *   Copyright (C) 2016  93aef0ce4dd141ece6f5

@@ -1,8 +1,8 @@
 /*
- * Author           : 93aef0ce4dd141ece6f5
- * Title            : exec.c
- * Description      : functions which concern executing
- *                    or authentication go here
+ *   Author           : 93aef0ce4dd141ece6f5
+ *   Title            : exec.c
+ *   Description      : functions which concern executing
+ *                      or authentication go here
  *
  *   Copyright (C) 2016  93aef0ce4dd141ece6f5
  *

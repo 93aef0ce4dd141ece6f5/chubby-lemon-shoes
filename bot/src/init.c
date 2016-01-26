@@ -1,7 +1,7 @@
 /*
- * Author           : 93aef0ce4dd141ece6f5
- * Title            : init.c
- * Description      :
+ *   Author           : 93aef0ce4dd141ece6f5
+ *   Title            : init.c
+ *   Description      :
  *
  *   Copyright (C) 2016  93aef0ce4dd141ece6f5
  *
@@ -26,7 +26,7 @@
 #include <time.h>
 #include <ctype.h>
 
-#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(_WIN32) || defined(__WIN32__)
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__WIN32__)
 #define _WIN32_WINNT 0x501
 
 #include <ws2tcpip.h>
@@ -216,6 +216,7 @@ static void trim_string (char *s) {
     if (s != NULL) {
         int i;
 
+        // need to fix this so it doesn't need a loop
         for (i = strlen (s)-10; i < strlen (s); i++) {
             if (s[i] == '\r' || s[i] == '\n') {
                 s[i] = '\0';

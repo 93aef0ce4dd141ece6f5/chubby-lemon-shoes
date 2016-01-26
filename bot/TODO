@@ -1,11 +1,15 @@
+bot.h
+
 bot.c
 1. add client options
     - install startup into registry
     - implement window stealth
     - install program as service
         > need to revise service management
+    - maybe add a repairing kit?
 
 init.c
+1. need to fix the trim_string function's loop
 
 recv.c
 1. add more commands

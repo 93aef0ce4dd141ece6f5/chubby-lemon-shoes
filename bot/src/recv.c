@@ -1,7 +1,7 @@
 /*
- * Author           : 93aef0ce4dd141ece6f5
- * Title            : recv.c
- * Description      : functions which concern receiving
+ *   Author           : 93aef0ce4dd141ece6f5
+ *   Title            : recv.c
+ *   Description      : functions which concern receiving
  *                    and received data go here.
  *
  *   Copyright (C) 2016  93aef0ce4dd141ece6f5

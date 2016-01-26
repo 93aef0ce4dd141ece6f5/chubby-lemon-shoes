@@ -36,6 +36,17 @@ pAccount new_account (void) {
 
 	a->pword = PWORD;
 	a->channel = CHANNEL;
+	a->num_admins = sizeof (admins)/sizeof (*admins);
+	a->admins = malloc (num_admins);
+	if (a->admins == NULL) {
+		return a;
+	}
+
+	int i;
+	for (i = 0; i < num_admins; i++) {
+		a->admin[i] = default_admins[i];
+	}
+
 	return a;
 }
 
@@ -100,7 +111,7 @@ SOCKET irc_connect (char *addr, char *port) {
     if (WSAStartup (MAKEWORD (2, 2), &wsa)) {
         fatal ("WSAStartup");
     }
-    
+
 #endif
     
     gai = getaddrinfo (addr, port, &hints, &res);

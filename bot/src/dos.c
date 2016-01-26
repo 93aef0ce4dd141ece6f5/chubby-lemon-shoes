@@ -59,6 +59,15 @@ void syn_flood (SOCKET s) {
     // todo
 }
 
+/*
+ * dns aplification
+ * would be best if we
+ * had an open dns resolver
+ * to test the functionality
+ * and to confirm if it works
+ * dns header packets located
+ * in the header file
+ */
 void dns_amp (SOCKET s) {
 	// todo
 }

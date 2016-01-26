@@ -1,3 +1,6 @@
+bot.h
+1. need to finish dns header packet structs
+
 bot.c
 1. add client options
     - install startup into registry

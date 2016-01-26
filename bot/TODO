@@ -21,6 +21,8 @@ exec.c
 2. need to add my_send function
 3. need option parser from message->msg for dos options
 4. add command to download file from internet
+5. fix memory free error in command parser parse_args function
 
 dos.c
 1. do udp_flood and syn_flood functions
+2. clean up udp_flood code

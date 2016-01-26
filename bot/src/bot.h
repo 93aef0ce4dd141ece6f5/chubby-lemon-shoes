@@ -1,9 +1,9 @@
 /*
- * Author 			: 93aef0ce4dd141ece6f5
- * Title			: bot.h
- * Description		: file contains miscellaneous 
- *              		definitions, function definitions
- *              		and structs
+ * Author           : 93aef0ce4dd141ece6f5
+ * Title            : bot.h
+ * Description      : file contains miscellaneous 
+ *                    definitions, function definitions
+ *                    and structs
  *
  *   Copyright (C) 2016  93aef0ce4dd141ece6f5
  *

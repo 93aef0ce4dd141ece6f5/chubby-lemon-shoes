@@ -1,7 +1,7 @@
 /*
- * Author			: 93aef0ce4dd141ece6f5
- * Title			: init.c
- * Description		:
+ * Author           : 93aef0ce4dd141ece6f5
+ * Title            : init.c
+ * Description      :
  *
  *   Copyright (C) 2016  93aef0ce4dd141ece6f5
  *
@@ -47,32 +47,32 @@ char *default_admins[] = {"dontrustme"};
  * account struct
  */
 pAccount new_account (void) {
-	pAccount a = malloc (sizeof (*a));
-	if (a == NULL) {
-		return a;
-	}
+    pAccount a = malloc (sizeof (*a));
+    if (a == NULL) {
+        return a;
+    }
 
-	memset (a->u_name, 0, MAX_NAME);
-	memset (a->n_name, 0, MAX_NAME);
+    memset (a->u_name, 0, MAX_NAME);
+    memset (a->n_name, 0, MAX_NAME);
 
-	strncpy (a->u_name, U_NAME, MAX_NAME);
-	strncpy (a->n_name, N_NAME, MAX_NAME);
+    strncpy (a->u_name, U_NAME, MAX_NAME);
+    strncpy (a->n_name, N_NAME, MAX_NAME);
 
-	a->pword = IRC_PWORD;
-	a->channel = CHANNEL;
-	a->admin_size = sizeof (default_admins)/sizeof (*default_admins);
-	a->num_admins = a->admin_size;
-	a->admins = malloc (sizeof (char *)*a->num_admins);
-	if (a->admins == NULL) {
-		return a;
-	}
+    a->pword = IRC_PWORD;
+    a->channel = CHANNEL;
+    a->admin_size = sizeof (default_admins)/sizeof (*default_admins);
+    a->num_admins = a->admin_size;
+    a->admins = malloc (sizeof (char *)*a->num_admins);
+    if (a->admins == NULL) {
+        return a;
+    }
 
-	int i;
-	for (i = 0; i < a->admin_size; i++) {
-		a->admins[i] = default_admins[i];
-	}
+    int i;
+    for (i = 0; i < a->admin_size; i++) {
+        a->admins[i] = default_admins[i];
+    }
 
-	return a;
+    return a;
 }
 
 /*
@@ -82,38 +82,38 @@ pAccount new_account (void) {
  * DEFAULT_MALLOC_SIZE (2048)
  */
 pMessage new_message (void) {
-	pMessage m = malloc (sizeof (*m));
-	if (m == NULL) {
-		return m;
-	}
-	
-	memset (m->n_name, 0, MAX_NAME);
+    pMessage m = malloc (sizeof (*m));
+    if (m == NULL) {
+        return m;
+    }
+    
+    memset (m->n_name, 0, MAX_NAME);
 
-	m->contact = malloc (DEFAULT_MALLOC_SIZE);
-	if (m->contact == NULL) {
-		return NULL;
-	}
-	m->contactSize = DEFAULT_MALLOC_SIZE;
+    m->contact = malloc (DEFAULT_MALLOC_SIZE);
+    if (m->contact == NULL) {
+        return NULL;
+    }
+    m->contactSize = DEFAULT_MALLOC_SIZE;
 
-	m->command = malloc (DEFAULT_MALLOC_SIZE);
-	if (m->command == NULL) {
-		return NULL;
-	}
-	m->commandSize = DEFAULT_MALLOC_SIZE;
+    m->command = malloc (DEFAULT_MALLOC_SIZE);
+    if (m->command == NULL) {
+        return NULL;
+    }
+    m->commandSize = DEFAULT_MALLOC_SIZE;
 
-	m->param = malloc (DEFAULT_MALLOC_SIZE);
-	if (m->param == NULL) {
-		return NULL;
-	}
-	m->paramSize = DEFAULT_MALLOC_SIZE;
+    m->param = malloc (DEFAULT_MALLOC_SIZE);
+    if (m->param == NULL) {
+        return NULL;
+    }
+    m->paramSize = DEFAULT_MALLOC_SIZE;
 
-	m->msg = malloc (DEFAULT_MALLOC_SIZE);
-	if (m->msg == NULL) {
-		return NULL;
-	}
-	m->msgSize = DEFAULT_MALLOC_SIZE;
+    m->msg = malloc (DEFAULT_MALLOC_SIZE);
+    if (m->msg == NULL) {
+        return NULL;
+    }
+    m->msgSize = DEFAULT_MALLOC_SIZE;
 
-	return m;
+    return m;
 }
 
 /*
@@ -193,15 +193,15 @@ int setup_irc (SOCKET s, pAccount account) {
  * string comparisons
  */
 void str_to_lower (char *s) {
-	if (s != NULL) {
-		int i;
-		
-		for (i = 0; i < strlen (s); i++) {
-			if (isalpha (s[i]) && isupper (s[i])) {
-				s[i] = tolower (s[i]);
-			}
-		}
-	}
+    if (s != NULL) {
+        int i;
+        
+        for (i = 0; i < strlen (s); i++) {
+            if (isalpha (s[i]) && isupper (s[i])) {
+                s[i] = tolower (s[i]);
+            }
+        }
+    }
 }
 
 /*
@@ -209,16 +209,16 @@ void str_to_lower (char *s) {
  * trailing \r\n
  */
 static void trim_string (char *s) {
-	if (s != NULL) {
-		int i;
+    if (s != NULL) {
+        int i;
 
-		for (i = strlen (s)-10; i < strlen (s); i++) {
-			if (s[i] == '\r' || s[i] == '\n') {
-				s[i] = '\0';
-				break;
-			}
-		}
-	}
+        for (i = strlen (s)-10; i < strlen (s); i++) {
+            if (s[i] == '\r' || s[i] == '\n') {
+                s[i] = '\0';
+                break;
+            }
+        }
+    }
 }
 
 /*
@@ -228,15 +228,15 @@ static void trim_string (char *s) {
  * comparisons
  */
 void format_message (pMessage m) {
-	str_to_lower (m->n_name);
-	str_to_lower (m->contact);
-	str_to_lower (m->command);
-	str_to_lower (m->param);
-	str_to_lower (m->msg);
+    str_to_lower (m->n_name);
+    str_to_lower (m->contact);
+    str_to_lower (m->command);
+    str_to_lower (m->param);
+    str_to_lower (m->msg);
 
-	trim_string (m->n_name);
-	trim_string (m->contact);
-	trim_string (m->command);
-	trim_string (m->param);
-	trim_string (m->msg);
+    trim_string (m->n_name);
+    trim_string (m->contact);
+    trim_string (m->command);
+    trim_string (m->param);
+    trim_string (m->msg);
 }

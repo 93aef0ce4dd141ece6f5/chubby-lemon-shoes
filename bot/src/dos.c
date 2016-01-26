@@ -1,8 +1,8 @@
 /*
- * Author 			: 93aef0ce4dd141ece6f5
- * Title			: dos.c
- * Description		: denial of service functions
- *              		go here.
+ * Author           : 93aef0ce4dd141ece6f5
+ * Title            : dos.c
+ * Description      : denial of service functions
+ *                    go here.
  *
  *   Copyright (C) 2016  93aef0ce4dd141ece6f5
  *

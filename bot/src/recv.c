@@ -1,8 +1,8 @@
 /*
- * Author 			: 93aef0ce4dd141ece6f5
- * Title			: recv.c
- * Description		: functions which concern receiving
- *              		and received data go here.
+ * Author           : 93aef0ce4dd141ece6f5
+ * Title            : recv.c
+ * Description      : functions which concern receiving
+ *                    and received data go here.
  *
  *   Copyright (C) 2016  93aef0ce4dd141ece6f5
  *
@@ -68,29 +68,29 @@ int cleanup (SOCKET s, pAccount a, pMessage m) {
         free (m);
     }
     
-	int err = 0;
+    int err = 0;
     // close socket
     err = shutdown (s, SD_BOTH);
     if (err == -1) {
-    	return err;
+        return err;
     }
     
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__)
 
     err = closesocket (s);
     if (err == SOCKET_ERROR) {
-    	return err;
+        return err;
     }
     err = WSACleanup();
     if (err == SOCKET_ERROR) {
-    	return err;
+        return err;
     }
 
 #elif defined(__linux__)
 
     err = close (s);
     if (err == -1) {
-    	return err;
+        return err;
     }
 
 #endif
@@ -106,9 +106,9 @@ static void extract (pMessage m, char *s) {
     char *token;
     const char delims[] = " !:";
 
-	/*
-	 * extract the user's message
-	 */
+    /*
+     * extract the user's message
+     */
     if ((token = strstr (s+1, ":")) != NULL) {
         if (strlen (token) > m->msgSize) {
             m->msg = realloc (m->msg, m->msgSize*2);
@@ -120,9 +120,9 @@ static void extract (pMessage m, char *s) {
         strncpy (m->msg, token+1, m->msgSize-1);
     }
 
-	/*
-	 * extract nickname of message
-	 */
+    /*
+     * extract nickname of message
+     */
     if ((token = strtok (s+1, delims)) != NULL) {
         strncpy (m->n_name, token, MAX_NAME-1);
     }
@@ -136,9 +136,9 @@ static void extract (pMessage m, char *s) {
     if ((token = strtok (NULL, delims)) != NULL) {
     }
 
-	/* 
-	 * extract the channel or user (from pm)
-	 */
+    /* 
+     * extract the channel or user (from pm)
+     */
     if ((token = strtok (NULL, delims)) != NULL) {
         if (strlen (token) > m->contactSize) {
             m->contact = realloc (m->contact, m->contactSize*2);
@@ -150,9 +150,9 @@ static void extract (pMessage m, char *s) {
         strncpy (m->contact, token, m->contactSize-1);
     }
 
-	/*
-	 * extract the first word of user's message
-	 */
+    /*
+     * extract the first word of user's message
+     */
     if ((token = strtok (NULL, delims)) != NULL) {
         if (strlen (token) > m->commandSize) {
             m->command = realloc (m->command, m->commandSize*2);
@@ -164,9 +164,9 @@ static void extract (pMessage m, char *s) {
         strncpy (m->command, token, m->commandSize-1);
     }
 
-	/*
-	 * extract the second word of user's message
-	 */
+    /*
+     * extract the second word of user's message
+     */
     if ((token = strtok (NULL, delims)) != NULL) {
         if (strlen (token) > m->paramSize) {
             m->param = realloc (m->param, m->paramSize*2);
@@ -243,6 +243,6 @@ void start_recv (SOCKET s, pAccount account) {
     
     err = cleanup (s, account, message);
     if (err == -1) {
-    	non_fatal ("Cleanup");
+        non_fatal ("Cleanup");
     }
 }

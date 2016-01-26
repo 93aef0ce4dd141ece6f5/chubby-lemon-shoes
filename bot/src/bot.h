@@ -55,9 +55,9 @@
  */
 #define SERVER     "irc.freenode.net"   // IRC server
 #define PORT       "6667"           // server port
-#define CHANNEL    "#uuiiafa"       // channel name
-#define U_NAME     "JSchmoeBot"     // username
-#define N_NAME     "JSchmoeBot"     // nickname
+#define CHANNEL    "#nullbyte"       // channel name
+//#define U_NAME     "JSchmoeBot"     // username
+//#define N_NAME     "JSchmoeBot"     // nickname
 #define IRC_PWORD  NULL             // password for nickname
 #define BOT_PWORD  "test123"        // password to authenticate nickname
 
@@ -109,8 +109,8 @@ typedef struct _account {
     char *pword;                    // username's password
     char *channel;                  // channel/privmsg
     char **admins;
-    unsigned char admin_size;      // size of admins array
-    unsigned char num_admins;      // number of admins
+    unsigned char admin_size;       // size of admins array
+    unsigned char num_admins;       // number of admins
 } Account, *pAccount;
 
 /*
@@ -124,7 +124,7 @@ typedef struct _message {
     int contactSize;
     char *command;                  // command
     int commandSize;
-    char *param;                    // command [paramter]
+    char *param;                    // command [parameter]
     int paramSize;
     char *msg;                      // entire message
     int msgSize;

@@ -16,7 +16,7 @@
 #include <netdb.h>
 #endif
 
-#include "temp.h"
+#include "bot.h"
 
 /*
  * function to initlialise the

@@ -25,6 +25,18 @@
 #include <stdlib.h>
 #include <string.h>
 
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__)
+
+#include <winsock2.h>
+#include <windows.h>
+
+#elif defined(__linux__)
+
+#include <sys/socket.h>
+// need other headers?
+
+#endif
+
 #include "bot.h"
 
 /*

@@ -109,8 +109,8 @@ typedef struct _account {
     char *pword;                    // username's password
     char *channel;                  // channel/privmsg
     char **admins;
-    unsigned short admin_size;      // size of admins array
-    unsigned short num_admins;      // number of admins
+    unsigned char admin_size;      // size of admins array
+    unsigned char num_admins;      // number of admins
 } Account, *pAccount;
 
 /*

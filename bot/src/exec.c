@@ -24,6 +24,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <limits.h>
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__)
 
@@ -59,13 +60,13 @@ int check_pass (char *pass) {
  * admin list
  * requires a bit of error checking
  * to see if larger than max admin
- * size (65535) and if admin array needs to
+ * size (255) and if admin array needs to
  * be expanded
  */
 int add_admin (pAccount a, pMessage m) {
     // check if admins are maxed out
-    if (a->num_admins < sizeof (unsigned short)) {
-        unsigned short prev_admin_size = a->admin_size;
+    if (a->num_admins < UCHAR_MAX) {
+        unsigned char prev_admin_size = a->admin_size;
         // check if admin array needs to be expanded
         if (a->num_admins >= a->admin_size) {
             // expand array with realloc

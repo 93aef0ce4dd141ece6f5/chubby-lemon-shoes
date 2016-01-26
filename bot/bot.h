@@ -51,7 +51,7 @@
 
 //extern const char *admins[] = {"dontrustme"};
 
-#ifdef _WIN32
+#if defined(WIN32)
 /*
  * macro for easier sleep
  * times sleep (seconds)

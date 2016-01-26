@@ -3,7 +3,7 @@
 #include <string.h>
 #include <ctype.h>
 
-#ifdef _WIN32
+#if defined(WIN32)
 #define _WIN32_WINNT 0x501
 
 #include <ws2tcpip.h>
@@ -93,7 +93,7 @@ SOCKET irc_connect (char *addr, char *port) {
     hints.ai_family = AF_INET;
     hints.ai_socktype = SOCK_STREAM;
 
-    #ifdef _WIN32
+    #if defined(WIN32)
     WSADATA wsa;
     
     if (WSAStartup (MAKEWORD (2, 2), &wsa)) {

@@ -25,7 +25,7 @@
  * compiling for WIN32 machines
  * include the folllowing
  */
-#ifdef _WIN32
+#if defined(WIN32)
 /*
  * GetLastError() for
  * error checking
@@ -49,7 +49,7 @@
 #include "bot.h"
 
 void non_fatal (char *str) {
-    #ifdef _WIN32
+    #if defined(WIN32)
     int err = 0;
     if ((err = (int)GetLastError())) {
         fprintf (stderr, "[!] %s error: %d\n", str, err);
@@ -60,7 +60,7 @@ void non_fatal (char *str) {
 }
 
 void fatal (char *str) {
-    #ifdef _WIN32
+    #if defined(WIN32)
     int err = 0;
     if ((err = (int)GetLastError())) {
         fprintf (stderr, "[!] %s error: %d\n", str, err);

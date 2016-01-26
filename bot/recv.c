@@ -18,7 +18,7 @@
 /*
  * networking functions go here
  */
-#ifdef _WIN32
+#if defined(WIN32)
 
 #include <winsock2.h>
 #include <ws2tcpip.h>
@@ -60,7 +60,7 @@ int cleanup (SOCKET s, pAccount a, pMessage m) {
     	return err;
     }
     
-    #ifdef _WIN32
+    #if defined(WIN32)
     err = closesocket (s);
     if (err == SOCKET_ERROR) {
     	return err;

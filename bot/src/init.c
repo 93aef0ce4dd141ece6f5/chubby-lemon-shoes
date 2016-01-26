@@ -159,6 +159,8 @@ SOCKET irc_connect (char *addr, char *port) {
         fatal ("Connect");
     }
     
+    freeaddrinfo (res);
+
     return s;
 }
 

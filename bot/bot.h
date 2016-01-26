@@ -51,12 +51,12 @@
 
 //extern const char *admins[] = {"dontrustme"};
 
-#if defined(WIN32)
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__)
 /*
  * macro for easier sleep
  * times sleep (seconds)
  */
-#define sleep(x) Sleep ((x)*1000);
+#define sleep(x) Sleep ((x)*100);
 
 #elif defined(__linux__)
 

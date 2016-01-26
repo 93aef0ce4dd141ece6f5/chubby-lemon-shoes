@@ -18,7 +18,7 @@
 /*
  * networking functions go here
  */
-#if defined(WIN32)
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__)
 
 #include <winsock2.h>
 #include <ws2tcpip.h>
@@ -60,7 +60,8 @@ int cleanup (SOCKET s, pAccount a, pMessage m) {
     	return err;
     }
     
-    #if defined(WIN32)
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__)
+
     err = closesocket (s);
     if (err == SOCKET_ERROR) {
     	return err;
@@ -69,14 +70,15 @@ int cleanup (SOCKET s, pAccount a, pMessage m) {
     if (err == SOCKET_ERROR) {
     	return err;
     }
-    
-    #elif defined(__linux__)
-    
+
+#elif defined(__linux__)
+
     err = close (s);
     if (err == -1) {
     	return err;
     }
-    #endif
+
+#endif
 
     return err;
 }

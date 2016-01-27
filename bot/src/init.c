@@ -27,6 +27,7 @@
 #include <ctype.h>
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__WIN32__)
+
 #define _WIN32_WINNT 0x501
 
 #include <ws2tcpip.h>
@@ -122,7 +123,7 @@ pMessage new_message (void) {
  * connection to the IRC
  * server, returns socket
  */
-SOCKET irc_connect (char *addr, char *port) {
+SOCKET server_connect (char *addr, char *port) {
     SOCKET s;
     int gai;
     struct addrinfo hints, *res;

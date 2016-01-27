@@ -53,7 +53,7 @@ int cleanup (SOCKET s, pAccount a, pMessage m) {
     // free heap allocs
     if (a != NULL) {
         int i;
-        for (i = 0; i < a->admin_size; i++) {
+        for (i = 0; i < a->num_admins; i++) {
             free (a->admins[i]);
         }
         free (a->admins);
@@ -103,21 +103,21 @@ int cleanup (SOCKET s, pAccount a, pMessage m) {
  * messages from IRC
  */
 static void extract (pMessage m, char *s) {
-    char *token;
+    char *token = NULL;
     const char delims[] = " !:";
 
     /*
      * extract the user's message
      */
     if ((token = strstr (s+1, ":")) != NULL) {
-        if (strlen (token) > m->msgSize) {
+        if (strlen (token) >= m->msgSize) {
             m->msg = realloc (m->msg, m->msgSize*2);
             m->msgSize *= 2;
         } else if ((strlen (token)*2) < m->msgSize && m->msgSize > DEFAULT_MALLOC_SIZE) {
             m->msg = realloc (m->msg, m->msgSize/2);
             m->msgSize /= 2;
         }
-        strncpy (m->msg, token+1, m->msgSize-1);
+        snprintf (m->msg, m->msgSize, "%s", token+1);
     }
 
     /*
@@ -137,10 +137,10 @@ static void extract (pMessage m, char *s) {
     }
 
     /* 
-     * extract the channel or user (from pm)
+     * extract the channel (or user from pm)
      */
     if ((token = strtok (NULL, delims)) != NULL) {
-        if (strlen (token) > m->contactSize) {
+        if (strlen (token) >= m->contactSize) {
             m->contact = realloc (m->contact, m->contactSize*2);
             m->contactSize *= 2;
         } else if ((strlen (token)*2) < m->contactSize && m->contactSize > DEFAULT_MALLOC_SIZE) {
@@ -154,7 +154,7 @@ static void extract (pMessage m, char *s) {
      * extract the first word of user's message
      */
     if ((token = strtok (NULL, delims)) != NULL) {
-        if (strlen (token) > m->commandSize) {
+        if (strlen (token) >= m->commandSize) {
             m->command = realloc (m->command, m->commandSize*2);
             m->commandSize *= 2;
         } else if ((strlen (token)*2) < m->commandSize && m->commandSize > DEFAULT_MALLOC_SIZE) {
@@ -168,7 +168,7 @@ static void extract (pMessage m, char *s) {
      * extract the second word of user's message
      */
     if ((token = strtok (NULL, delims)) != NULL) {
-        if (strlen (token) > m->paramSize) {
+        if (strlen (token) >= m->paramSize) {
             m->param = realloc (m->param, m->paramSize*2);
             m->paramSize *= 2;
         } else if ((strlen (token)*2) < m->paramSize && m->paramSize > DEFAULT_MALLOC_SIZE) {

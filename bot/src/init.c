@@ -41,8 +41,6 @@
 
 #include "bot.h"
 
-char *default_admins[] = {"dontrustme"};
-
 /*
  * function to initlialise the
  * account struct
@@ -64,16 +62,11 @@ pAccount new_account (void) {
 
     a->pword = IRC_PWORD;
     a->channel = CHANNEL;
-    a->admin_size = sizeof (default_admins)/sizeof (*default_admins);
+    a->admin_size = 0;
     a->num_admins = a->admin_size;
-    a->admins = malloc (sizeof (char *)*a->num_admins);
+    a->admins = malloc (sizeof (char *)*a->admin_size);
     if (a->admins == NULL) {
         return a;
-    }
-
-    int i;
-    for (i = 0; i < a->admin_size; i++) {
-        a->admins[i] = default_admins[i];
     }
 
     return a;
@@ -97,24 +90,28 @@ pMessage new_message (void) {
     if (m->contact == NULL) {
         return NULL;
     }
+    memset (m->contact, 0, DEFAULT_MALLOC_SIZE);
     m->contactSize = DEFAULT_MALLOC_SIZE;
 
     m->command = malloc (DEFAULT_MALLOC_SIZE);
     if (m->command == NULL) {
         return NULL;
     }
+    memset (m->command, 0, DEFAULT_MALLOC_SIZE);
     m->commandSize = DEFAULT_MALLOC_SIZE;
 
     m->param = malloc (DEFAULT_MALLOC_SIZE);
     if (m->param == NULL) {
         return NULL;
     }
+    memset (m->param, 0, DEFAULT_MALLOC_SIZE);
     m->paramSize = DEFAULT_MALLOC_SIZE;
 
     m->msg = malloc (DEFAULT_MALLOC_SIZE);
     if (m->msg == NULL) {
         return NULL;
     }
+    memset (m->msg, 0, DEFAULT_MALLOC_SIZE);
     m->msgSize = DEFAULT_MALLOC_SIZE;
 
     return m;

@@ -51,23 +51,14 @@
 void *udp_flood (void *args) {
     // todo
     char output[MAX_MSG_SIZE];
-    SOCKET s = ((thr_args *)args)->s;
+    SOCKET s = ((thd_args *)args)->s;
     
     snprintf (output, sizeof (output), "PRIVMSG %s :UDP Flooding %s:%s with %d threads for %ds.\r\n", 
-                ((thr_args *)args)->contact, ((thr_args *)args)->addr, ((thr_args *)args)->port, 
-                ((thr_args *)args)->threads, ((thr_args *)args)->time);
+                ((thd_args *)args)->contact, ((thd_args *)args)->addr, ((thd_args *)args)->port, 
+                ((thd_args *)args)->threads, ((thd_args *)args)->time);
     send (s, output, strlen (output), 0);
 
-
-#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__)
-
-    // ExitThread (0);
-
-#elif defined(__linux__)
-
     pthread_exit(0);
-
-#endif
     return NULL;
 }
  

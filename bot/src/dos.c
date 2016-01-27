@@ -58,7 +58,15 @@ void *udp_flood (void *args) {
                 ((thd_args *)args)->threads, ((thd_args *)args)->time);
     send (s, output, strlen (output), 0);
 
-    pthread_exit(0);
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__)
+
+    ExitThread (0);
+
+#elif defined(__linux__)
+
+    pthread_exit (0);
+
+#endif
     return NULL;
 }
  

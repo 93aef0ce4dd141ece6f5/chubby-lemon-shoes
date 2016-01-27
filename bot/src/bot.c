@@ -91,7 +91,7 @@ void fatal (char *str) {
     exit (EXIT_FAILURE);
 }
 
-int main (int argc, char *argv[]) {
+int main (void) {
     SOCKET s;
 
     pAccount account = new_account();

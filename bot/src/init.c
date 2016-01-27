@@ -123,7 +123,7 @@ pMessage new_message (void) {
  * connection to the IRC
  * server, returns socket
  */
-SOCKET server_connect (char *addr, char *port) {
+SOCKET server_connect (const char *addr, const char *port) {
     SOCKET s;
     int gai;
     struct addrinfo hints, *res;

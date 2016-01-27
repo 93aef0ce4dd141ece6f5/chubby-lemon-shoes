@@ -36,8 +36,9 @@
 
 #elif defined(__linux__)
 
-#include <netdb.h>
+#include <unistd.h>
 #include <sys/socket.h>
+#include <netdb.h>
 #include <pthread.h>
 // need other headers?
 
@@ -67,13 +68,14 @@ void *udp_flood (void *args) {
 
     // set up connection data
     SOCKET target_s;
-    WSADATA wsa;
     struct addrinfo hints, *res;
     memset (&hints, 0, sizeof (hints));
     hints.ai_family = AF_INET;
     hints.ai_socktype = SOCK_DGRAM;
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__)
+
+    WSADATA wsa;
 
     if (WSAStartup (MAKEWORD (2, 2), &wsa)) {
         return NULL;

@@ -99,7 +99,7 @@ int main (int argc, char *argv[]) {
         fatal ("New account");
     }
 
-    s = irc_connect (SERVER, PORT);
+    s = server_connect (SERVER, PORT);
 
     setup_irc (s, account);
 

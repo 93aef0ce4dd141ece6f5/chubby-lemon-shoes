@@ -133,14 +133,14 @@ typedef struct _message {
     int msgSize;
 } Message, *pMessage;
 
-typedef struct _thd_args {
+typedef struct _thr_args {
     SOCKET s;
     char *contact;
     char *addr;
     char *port;
     int threads;
     int time;
-} thd_args;
+} thr_args;
 
 /*
  * need to define some tcp/ip
@@ -259,7 +259,7 @@ void fatal (char *);
 // init.c
 pAccount new_account (void);
 pMessage new_message (void);
-SOCKET irc_connect (char *, char *);
+SOCKET server_connect (char *, char *);
 int setup_irc (SOCKET, pAccount);
 void str_to_lower (char *);
 void format_message (pMessage);

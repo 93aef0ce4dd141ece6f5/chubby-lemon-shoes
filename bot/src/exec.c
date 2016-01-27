@@ -135,8 +135,8 @@ bool is_dos (char *cmd) {
     return FALSE;
 }
 
-static thd_args *new_thd_args (SOCKET s) {
-    thd_args *ta = malloc (sizeof (*ta));
+static thr_args *new_thr_args (SOCKET s) {
+    thr_args *ta = malloc (sizeof (*ta));
 
     ta->s = s;
     ta->contact = NULL;
@@ -180,7 +180,6 @@ int parse_args (SOCKET s, pMessage m) {
             break;
         }
         argv[i] = token;
-        printf ("argv[%d]: %s\n", i, argv[i]);
     }
 
     // argument count
@@ -191,7 +190,7 @@ int parse_args (SOCKET s, pMessage m) {
     }
 
     int opt;
-    thd_args *ta = new_thd_args (s);
+    thr_args *ta = new_thr_args (s);
     ta->contact = m->contact;
 
     // parse options from message

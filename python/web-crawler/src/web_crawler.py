@@ -65,7 +65,6 @@ while len(urls)>0:
 
 		if url in tag['href'] and tag['href'] not in visited:
 			g.write(tag['href']+"\n")
-#			print tag['href']
 			urls.append(tag['href'])
 			visited.append(tag['href'])
 

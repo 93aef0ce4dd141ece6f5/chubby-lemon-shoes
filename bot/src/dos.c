@@ -119,7 +119,7 @@ void *udp_flood (void *args) {
 
 #elif defined(__linux__)
 
-    //close (target_s);
+    close (target_s);
     pthread_exit (0);
 
 #endif

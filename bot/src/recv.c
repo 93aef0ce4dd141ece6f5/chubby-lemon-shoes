@@ -113,7 +113,8 @@ static void extract (pMessage m, char *s) {
         if (strlen (token) >= m->msgSize) {
             m->msg = realloc (m->msg, m->msgSize*2);
             m->msgSize *= 2;
-        } else if ((strlen (token)*2) < m->msgSize && m->msgSize > DEFAULT_MALLOC_SIZE) {
+        } else if ((strlen (token)*2) < m->msgSize 
+                    && m->msgSize > DEFAULT_MALLOC_SIZE) {
             m->msg = realloc (m->msg, m->msgSize/2);
             m->msgSize /= 2;
         }
@@ -143,7 +144,8 @@ static void extract (pMessage m, char *s) {
         if (strlen (token) >= m->contactSize) {
             m->contact = realloc (m->contact, m->contactSize*2);
             m->contactSize *= 2;
-        } else if ((strlen (token)*2) < m->contactSize && m->contactSize > DEFAULT_MALLOC_SIZE) {
+        } else if ((strlen (token)*2) < m->contactSize 
+                    && m->contactSize > DEFAULT_MALLOC_SIZE) {
             m->contact = realloc (m->contact, m->contactSize/2);
             m->contactSize /= 2;
         }
@@ -157,7 +159,8 @@ static void extract (pMessage m, char *s) {
         if (strlen (token) >= m->commandSize) {
             m->command = realloc (m->command, m->commandSize*2);
             m->commandSize *= 2;
-        } else if ((strlen (token)*2) < m->commandSize && m->commandSize > DEFAULT_MALLOC_SIZE) {
+        } else if ((strlen (token)*2) < m->commandSize 
+                    && m->commandSize > DEFAULT_MALLOC_SIZE) {
             m->command = realloc (m->command, m->commandSize/2);
             m->commandSize /= 2;
         }
@@ -171,7 +174,8 @@ static void extract (pMessage m, char *s) {
         if (strlen (token) >= m->paramSize) {
             m->param = realloc (m->param, m->paramSize*2);
             m->paramSize *= 2;
-        } else if ((strlen (token)*2) < m->paramSize && m->paramSize > DEFAULT_MALLOC_SIZE) {
+        } else if ((strlen (token)*2) < m->paramSize 
+                    && m->paramSize > DEFAULT_MALLOC_SIZE) {
             m->param = realloc (m->param, m->paramSize/2);
             m->paramSize /= 2;
         }
@@ -218,7 +222,14 @@ void start_recv (SOCKET s, pAccount account) {
                     // check password
                     if (check_pass (message->param)) {
                         if (add_admin (account, message)) {
-                            //  successfully added
+                            // send message that user has been authenticated
+                            const char *contact = message->contact;
+                            if (strcmp (contact, account->n_name) == 0) {
+                                contact = message->n_name;
+                            }
+
+                            my_send (s, "PRIVMSG %s :%s has been authenticated.\r\n", 
+                                    contact, message->n_name);
                         } else {
                             // admin list expansion error
                             non_fatal ("Admin array realloc");
@@ -233,6 +244,8 @@ void start_recv (SOCKET s, pAccount account) {
                         if (parse_args (s, message) == FALSE) {
                             printf ("parse_args err\n");
                         }
+                    } else {
+                        execute_command (s, account, message);
                     }
                 } else {
                     // deny access

@@ -53,13 +53,13 @@
  * options with a python
  * script
  */
-#define SERVER     "irc.freenode.net"   // IRC server
-#define PORT       "6667"           // server port
-#define CHANNEL    "#uuiiafa"       // channel name
+#define SERVER	"irc.freenode.net"
+#define PORT	"6667"
+#define CHANNEL	"#nullbyte"
 //#define U_NAME     "JSchmoeBot"     // username
 //#define N_NAME     "JSchmoeBot"     // nickname
 #define IRC_PWORD  NULL             // password for nickname
-#define BOT_PWORD  "test123"        // password to authenticate nickname
+#define BOT_PWORD	"test123"
 
 /*
  * defining some client

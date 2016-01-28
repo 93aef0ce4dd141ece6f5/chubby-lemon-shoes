@@ -1,22 +1,25 @@
+bot.h
+
 bot.c
 1. add client options
     - install startup into registry
     - implement window stealth
     - install program as service
         > need to revise service management
+    - maybe add a repairing kit?
 
 init.c
+1. need to fix the trim_string function's loop
 
 recv.c
 1. add more commands
     - help command
-    - dos commands
+    - download file command
+2. fix memory errors in extract function
     
 exec.c
-1. fix admin addition
-2. need to add my_send function
-3. need option parser from message->msg for dos options
-4. add command to download file from internet
+1. fix parse_args function
+2. add command to download file from internet
 
 dos.c
-1. do udp_flood and syn_flood functions
+1. do syn_flood function

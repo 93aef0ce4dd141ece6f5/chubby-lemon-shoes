@@ -1,7 +1,7 @@
 /*
- * Author           : 93aef0ce4dd141ece6f5
- * Title            : init.c
- * Description      :
+ *   Author           : 93aef0ce4dd141ece6f5
+ *   Title            : init.c
+ *   Description      :
  *
  *   Copyright (C) 2016  93aef0ce4dd141ece6f5
  *
@@ -26,7 +26,8 @@
 #include <time.h>
 #include <ctype.h>
 
-#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(_WIN32) || defined(__WIN32__)
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__)
+
 #define _WIN32_WINNT 0x501
 
 #include <ws2tcpip.h>
@@ -40,8 +41,6 @@
 #endif
 
 #include "bot.h"
-
-char *default_admins[] = {"dontrustme"};
 
 /*
  * function to initlialise the
@@ -64,16 +63,11 @@ pAccount new_account (void) {
 
     a->pword = IRC_PWORD;
     a->channel = CHANNEL;
-    a->admin_size = sizeof (default_admins)/sizeof (*default_admins);
+    a->admin_size = 0;
     a->num_admins = a->admin_size;
-    a->admins = malloc (sizeof (char *)*a->num_admins);
+    a->admins = malloc (sizeof (char *)*a->admin_size);
     if (a->admins == NULL) {
         return a;
-    }
-
-    int i;
-    for (i = 0; i < a->admin_size; i++) {
-        a->admins[i] = default_admins[i];
     }
 
     return a;
@@ -97,24 +91,28 @@ pMessage new_message (void) {
     if (m->contact == NULL) {
         return NULL;
     }
+    memset (m->contact, 0, DEFAULT_MALLOC_SIZE);
     m->contactSize = DEFAULT_MALLOC_SIZE;
 
     m->command = malloc (DEFAULT_MALLOC_SIZE);
     if (m->command == NULL) {
         return NULL;
     }
+    memset (m->command, 0, DEFAULT_MALLOC_SIZE);
     m->commandSize = DEFAULT_MALLOC_SIZE;
 
     m->param = malloc (DEFAULT_MALLOC_SIZE);
     if (m->param == NULL) {
         return NULL;
     }
+    memset (m->param, 0, DEFAULT_MALLOC_SIZE);
     m->paramSize = DEFAULT_MALLOC_SIZE;
 
     m->msg = malloc (DEFAULT_MALLOC_SIZE);
     if (m->msg == NULL) {
         return NULL;
     }
+    memset (m->msg, 0, DEFAULT_MALLOC_SIZE);
     m->msgSize = DEFAULT_MALLOC_SIZE;
 
     return m;
@@ -125,7 +123,7 @@ pMessage new_message (void) {
  * connection to the IRC
  * server, returns socket
  */
-SOCKET irc_connect (char *addr, char *port) {
+SOCKET server_connect (const char *addr, const char *port) {
     SOCKET s;
     int gai;
     struct addrinfo hints, *res;
@@ -159,6 +157,8 @@ SOCKET irc_connect (char *addr, char *port) {
         fatal ("Connect");
     }
     
+    freeaddrinfo (res);
+
     return s;
 }
 
@@ -216,6 +216,7 @@ static void trim_string (char *s) {
     if (s != NULL) {
         int i;
 
+        // need to fix this so it doesn't need a loop
         for (i = strlen (s)-10; i < strlen (s); i++) {
             if (s[i] == '\r' || s[i] == '\n') {
                 s[i] = '\0';

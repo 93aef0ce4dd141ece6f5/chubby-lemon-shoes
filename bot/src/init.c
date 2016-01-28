@@ -26,7 +26,7 @@
 #include <time.h>
 #include <ctype.h>
 
-#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__WIN32__)
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__)
 
 #define _WIN32_WINNT 0x501
 

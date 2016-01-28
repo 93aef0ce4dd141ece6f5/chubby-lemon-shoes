@@ -76,7 +76,7 @@ with open("./temp.h","w") as modifiedfile:
 #Now compile using temp.h:
 sys.stdout.write("Compiling to file 'bot'...")
 sys.stdout.flush() #Neatly output Compiling...Done
-os.system("gcc -Wall -Werror -O -o bot bot.c temp.h init.c recv.c dos.c")
+os.system("gcc -Wall -Werror -O -o bot bot.c temp.h init.c recv.c dos.c exec.c -lpthread")
 print("Done")
 #...and delete it:
 if not args.nodelete:

